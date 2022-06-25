@@ -13,12 +13,14 @@ import {
   Collapse,
   ListItemIcon,
   ListItemText,
+  Divider,
 } from "@mui/material";
 import FeatherIcon from "feather-icons-react";
 import LogoIcon from "../logo/LogoIcon";
 import Menuitems from "./MenuItems";
 import { useRouter } from "next/router";
 import Ratings from "./Ratings";
+import Category from "./Category";
 
 const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
   const [open, setOpen] = React.useState(true);
@@ -76,7 +78,9 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
           ))}
         </List>
       </Box>
-      <hr />
+      <Divider />
+      <Category />
+      <Divider />
       <Ratings />
     </Box>
   );

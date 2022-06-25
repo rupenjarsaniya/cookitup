@@ -11,9 +11,10 @@ import {
     FormLabel,
     FormControl,
     Button,
-    Link,
+    Typography,
 } from "@mui/material";
 import BaseCard from "../src/components/baseCard/BaseCard";
+import Link from 'next/link';
 
 const Signup = () => {
     return (
@@ -39,8 +40,10 @@ const Signup = () => {
                                 control={<Checkbox defaultChecked />}
                                 label="Show Password"
                             />
-                            <Link href="/login" underline="hover">
-                                Login Here!
+                            <Link href={"/login"}>
+                                <Typography variant="div" mt={3} style={{ cursor: "pointer" }} color="primary">
+                                    Login Here!
+                                </Typography>
                             </Link>
                         </Stack>
                         <br />

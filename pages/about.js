@@ -9,10 +9,14 @@ import {
   Stack,
   TextField,
   Rating,
+  Avatar,
 } from "@mui/material";
 import BaseCard from "../src/components/baseCard/BaseCard";
+import userimg1 from "../assets/images/users/1.jpg";
+import userimg2 from "../assets/images/users/2.jpg";
+import userimg3 from "../assets/images/users/3.jpg";
 
-export default function About() {
+const About = () => {
   const [value, setValue] = React.useState(0);
   return (
     <Grid container spacing={0}>
@@ -66,8 +70,51 @@ export default function About() {
           <Button variant="contained" mt={2}>
             Send
           </Button>
+          <Typography variant="div" mt={5} style={{ display: "block" }}>
+            <Typography variant="div" style={{ display: "block" }} pb={1} mb={3}>
+              <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                <Avatar alt="Remy Sharp" src={userimg1} />
+                <Typography variant="h5" style={{}} ml={1}>
+                  Rupen Jarsaniya
+                </Typography>
+              </Typography>
+              <Typography variant="div" style={{ display: "block", color: "gray" }} mt={2}>
+                Nice website, i learn many cooking recipe
+              </Typography>
+            </Typography>
+
+            <Typography variant="div" style={{ display: "block" }} pb={1} mb={3}>
+              <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                <Avatar alt="Remy Sharp" src={userimg1} />
+                <Typography variant="h5" style={{}} ml={1}>
+                  Bhagyashree Thombre
+                </Typography>
+              </Typography>
+              <Typography variant="div" style={{ display: "block", color: "gray" }} mt={2}>
+                Cool website
+              </Typography>
+            </Typography>
+
+            <Typography variant="div" style={{ display: "block" }} pb={1} mb={3}>
+              <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                <Avatar alt="Remy Sharp" src={userimg1} />
+                <Typography variant="h5" style={{}} ml={1}>
+                  Pratham Kansara
+                </Typography>
+              </Typography>
+              <Typography variant="div" style={{ display: "block", color: "gray" }} mt={2}>
+                Best Recipe website i never seen before
+              </Typography>
+            </Typography>
+
+            <Typography variant="div" mt={3} style={{ display: "block", cursor: "pointer" }} color="primary">
+              See all reviews
+            </Typography>
+          </Typography>
         </BaseCard>
       </Grid>
     </Grid>
   );
 }
+
+export default About;

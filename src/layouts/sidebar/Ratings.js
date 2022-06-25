@@ -7,13 +7,12 @@ const Ratings = () => {
     const [value, setValue] = React.useState(2);
     return (
         <>
-            <Rating name="read-only" value={value} readOnly />
-            <List component="li" disablePadding>
+            <List component="li">
                 <NextLink href={"/"}>
                     <ListItem
                         button
                         sx={{
-                            mb: 1
+                            mb: 0.5
                         }}
                     >
                         <ListItemIcon>
@@ -32,7 +31,7 @@ const Ratings = () => {
                     <ListItem
                         button
                         sx={{
-                            mb: 1
+                            mb: 0.5
                         }}
                     >
                         <ListItemIcon>
@@ -51,7 +50,7 @@ const Ratings = () => {
                     <ListItem
                         button
                         sx={{
-                            mb: 1
+                            mb: 0.5
                         }}
                     >
                         <ListItemIcon>
@@ -67,11 +66,7 @@ const Ratings = () => {
                     </ListItem>
                 </NextLink>
             </List>
-            {/* <Typography variant="h5">
-                This impressive paella is a perfect party dish and a fun meal to
-                cook together with your guests. Add 1 cup of frozen peas along
-                with the mussels, if you like.
-            </Typography> */}
+            <Rating name="read-only" value={value} readOnly />
         </>
     )
 }

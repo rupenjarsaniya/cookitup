@@ -39,6 +39,7 @@ const ProfileDD = () => {
             width="30"
             height="30"
             className="roundedCircle"
+            style={{ borderRadius: "100%" }}
           />
           <Box
             sx={{
@@ -90,7 +91,13 @@ const ProfileDD = () => {
               onClick={handleClose4}
             >
               <ListItemButton>
+                <ListItemText primary="Dashboard" />
+              </ListItemButton>
+              <ListItemButton>
                 <ListItemText primary="My Profile" />
+              </ListItemButton>
+              <ListItemButton>
+                <ListItemText primary="Change Password" />
               </ListItemButton>
             </List>
           </Box>
