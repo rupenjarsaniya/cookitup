@@ -17,12 +17,12 @@ import {
 import BaseCard from "../src/components/baseCard/BaseCard";
 import Link from 'next/link';
 
-const Signup = () => {
+const Updateprofile = () => {
     return (
         <>
             <Grid container spacing={0} direction="row" justifyContent="center" alignItems="center">
                 <Grid item xs={12} lg={6}>
-                    <BaseCard title="Create Your Account">
+                    <BaseCard title="Edit Profile">
                         <Typography variant="div" style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginBottom: 20 }}>
                             <Avatar
                                 alt="Remy Sharp"
@@ -38,29 +38,19 @@ const Signup = () => {
                                 type="text"
                             />
                             <TextField id="email-basic" label="Email" variant="outlined" />
-                            <TextField
-                                id="pass-basic"
-                                label="Password"
-                                type="password"
-                                variant="outlined"
-                            />
                             <Typography variant="div" style={{ color: "gray" }}>
                                 Select Profile Photo
                             </Typography>
                             <input type="file" id="actual-btn" name="recipeimg" />
-                            <FormControlLabel
-                                control={<Checkbox defaultChecked />}
-                                label="Show Password"
-                            />
-                            <Link href={"/login"}>
+                            <Link href={"/changepassword"}>
                                 <Typography variant="div" mt={3} style={{ cursor: "pointer" }} color="primary">
-                                    Login Here!
+                                    Change Password
                                 </Typography>
                             </Link>
                         </Stack>
                         <br />
                         <Button variant="contained" mt={2}>
-                            Sign up
+                            Update Profile
                         </Button>
                     </BaseCard>
                 </Grid>
@@ -69,4 +59,4 @@ const Signup = () => {
     )
 }
 
-export default Signup
+export default Updateprofile

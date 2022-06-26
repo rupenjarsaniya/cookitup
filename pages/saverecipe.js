@@ -37,7 +37,7 @@ const Saverecipe = () => {
             <Grid item xs={12} lg={12} px={1}>
                 <Typography variant="h3" mb={2}>Saved Recipes</Typography>
                 <Typography variant="div" style={{ display: "block" }}>
-                    <Typography variant="div" style={{ display: "block", backgroundColor: "rgb(252, 252, 252)", borderRadius: 10 }} py={3} px={3} mb={3}>
+                    <Typography variant="div" style={{ display: "block", backgroundColor: "rgb(255, 255, 255)", borderRadius: 10 }} py={3} px={3} mb={3}>
 
                         {/* Header */}
                         <Typography variant="div" style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" }}>
@@ -200,7 +200,7 @@ const Saverecipe = () => {
                         </Typography>
                     </Typography>
 
-                    <Typography variant="div" style={{ display: "block", backgroundColor: "rgb(252, 252, 252)", borderRadius: 10 }} py={3} px={3} mb={3}>
+                    <Typography variant="div" style={{ display: "block", backgroundColor: "rgb(255, 255, 255)", borderRadius: 10 }} py={3} px={3} mb={3}>
 
                         {/* Header */}
                         <Typography variant="div" style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" }}>
@@ -363,7 +363,7 @@ const Saverecipe = () => {
                         </Typography>
                     </Typography>
 
-                    <Typography variant="div" style={{ display: "block", backgroundColor: "rgb(252, 252, 252)", borderRadius: 10 }} py={3} px={3} mb={3}>
+                    <Typography variant="div" style={{ display: "block", backgroundColor: "rgb(255, 255, 255)", borderRadius: 10 }} py={3} px={3} mb={3}>
 
                         {/* Header */}
                         <Typography variant="div" style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" }}>
