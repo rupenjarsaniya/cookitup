@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
-import { Jwt } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import validator from "validator";
+import bcrypt from 'bcrypt';
+import ErrorHandler from "../helpers/Errorhandler";
+import httpStatusCodes from "../helpers/httpStatusCodes";
 
 const UserSchema = mongoose.Schema({
     name: {
@@ -45,5 +48,22 @@ const UserSchema = mongoose.Schema({
     }
 }, { Timestamps: true });
 
+UserSchema.pre("save", async function (next) {
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 12);
+    }
+    next();
+});
+
+UserSchema.methods.generateToken = async function (req, res) {
+    try {
+        return jwt.sign({ _id: this._id }, process.env.JWT_SECRET_KEY);
+    }
+    catch (error) {
+        throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Something went wrong while generating token");
+    }
+}
+
+mongoose.models = {};
 const User = mongoose.model("User", UserSchema);
 export default User;
