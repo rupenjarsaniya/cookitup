@@ -26,6 +26,8 @@ OtpSchema.pre("save", async function (next) {
     next();
 });
 
+mongoose.models = {};
+
 const Otp = new mongoose.model("Otp", OtpSchema);
 
 module.exports = Otp;

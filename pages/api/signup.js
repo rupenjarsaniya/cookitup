@@ -4,7 +4,7 @@ import User from '../../models/User';
 import SendToken from '../../helpers/sendToken';
 import ErrorHandler from '../../helpers/Errorhandler';
 import httpStatusCodes from '../../helpers/httpStatusCodes';
-import upload from '../../helpers/profileimage';
+import upload from '../../middlewares/profileimage';
 
 const handler = nextConnect();
 

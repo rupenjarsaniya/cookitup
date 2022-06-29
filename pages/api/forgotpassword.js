@@ -1,4 +1,5 @@
 import nextConnect from "next-connect";
+import bcrypt from "bcrypt";
 import connectDb from "../../database/database";
 import User from '../../models/User';
 import Forgottoken from '../../models/Forgottoken';
@@ -17,6 +18,8 @@ handler.post(async (req, res) => {
         if (!getToken) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Password reset link was expire");
 
         if (req.body.password !== req.body.confirmpassword) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Passwords not matched");
+
+        req.body.password = await bcrypt.hash(req.body.password, 12);
 
         const user = await User.findOneAndUpdate({ email: getToken.email }, { password: req.body.password }, { new: true });
 

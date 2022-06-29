@@ -3,20 +3,21 @@ import connectDb from '../../database/database';
 import User from '../../models/User';
 import ErrorHandler from '../../helpers/Errorhandler';
 import httpStatusCodes from '../../helpers/httpStatusCodes';
-import upload from '../../helpers/profileimage';
+import upload from '../../middlewares/profileimage';
+import AuthenticateUser from '../../middlewares/authenticateUser';
 
 const handler = nextConnect();
 
 handler.use(connectDb);
+handler.use(AuthenticateUser);
 handler.use(upload.single('profileimg'));
 
-handler.post(async (req, res) => {
+handler.put(async (req, res) => {
     // Change http:// to protocol
     try {
-
         const url = 'http://' + req.headers.host;
 
-        const { name, email, profileimg, gender, location, expertin, expirence } = req.body;
+        const { name, email, gender, location, expertin, expirence } = req.body;
 
         let userobj = {};
 
@@ -26,9 +27,9 @@ handler.post(async (req, res) => {
         if (location) { userobj.location = location };
         if (expertin) { userobj.expertin = expertin };
         if (expirence) { userobj.expirence = expirence };
-        if (profileimg) { userobj.profileimg = url + '/userprofileimg/' + req.file.filename };
+        if (req.file) { userobj.profileimg = url + '/userprofileimg/' + req.file.filename };
 
-        const updateUser = await User.findByIdAndUpdate(req.userId, { $set: userobj }, { new: true });
+        const updateUser = await User.findByIdAndUpdate(req.userId, { $set: userobj }, { new: true, runValidators: true });
 
         if (!updateUser) throw new ErrorHandler(httpStatusCodes.INTERNAL_SERVER, "Someting went wrong");
 

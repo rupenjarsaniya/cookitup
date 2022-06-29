@@ -24,7 +24,7 @@ handler.post(async (req, res) => {
 
         const createData = new Otp({
             email: req.body.email,
-            otp: req.body.otp
+            otp: OTP
         });
 
         const saveData = await createData.save();

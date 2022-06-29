@@ -13,7 +13,7 @@ const RecipeSchema = mongoose.Schema({
     },
     makingsteps: {
         type: Object,
-        require: true
+        required: true
     },
     ingredients: {
         type: String,
@@ -33,6 +33,10 @@ const RecipeSchema = mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             required: true
         },
+        name: {
+            type: String,
+            required: true
+        },
         comment: {
             type: String,
             required: true
@@ -42,11 +46,12 @@ const RecipeSchema = mongoose.Schema({
             default: Date.now()
         }
     }],
-    savereceipeusers: {
+    saverecipeusers: {
         type: Array,
         default: []
     }
 }, { Timestamps: true });
 
+mongoose.models = {};
 const Recipe = new mongoose.model("Recipe", RecipeSchema);
 export default Recipe;

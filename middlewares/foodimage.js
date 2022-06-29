@@ -1,8 +1,8 @@
 import multer from "multer";
-import ErrorHandler from "./Errorhandler";
-import httpStatusCodes from "./httpStatusCodes";
+import ErrorHandler from "../helpers/Errorhandler";
+import httpStatusCodes from "../helpers/httpStatusCodes";
 
-const DIR = './public/userprofileimg/';
+const DIR = './public/foodimg/';
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({
+const uploadfoodimg = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
         if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
@@ -26,4 +26,4 @@ const upload = multer({
     }
 });
 
-module.exports = upload;
+module.exports = uploadfoodimg;

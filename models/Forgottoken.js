@@ -18,6 +18,8 @@ const ForgotTokenSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+mongoose.models = {};
+
 const Forgottoken = new mongoose.model("Forgottoken", ForgotTokenSchema);
 
 module.exports = Forgottoken;
