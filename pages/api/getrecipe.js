@@ -18,7 +18,7 @@ handler.get(async (req, res) => {
 
         if (recipe.length === 0) throw new ErrorHandler(httpStatusCodes.NOT_FOUND, "No recipe found");
 
-        return res.status(httpStatusCodes.OK).json({ recipe });
+        return res.status(httpStatusCodes.OK).json(recipe);
 
     }
 

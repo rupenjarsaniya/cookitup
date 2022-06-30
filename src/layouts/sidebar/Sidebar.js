@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NextLink from "next/link";
 import PropTypes from "prop-types";
 import {
@@ -21,9 +21,19 @@ import Menuitems from "./MenuItems";
 import { useRouter } from "next/router";
 import Ratings from "./Ratings";
 import Category from "./Category";
+import { useDispatch, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actionCreators } from '../../../States/index';
 
 const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
+
+  const dispatch = useDispatch();
+
+  const actions = bindActionCreators(actionCreators, dispatch);
+
   const [open, setOpen] = React.useState(true);
+
+  const userdata = useSelector((state) => state.user);
 
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
@@ -34,55 +44,168 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
       setOpen(index);
     }
   };
+
   let curl = useRouter();
   const location = curl.pathname;
+
+  const logoutUser = () => {
+    localStorage.removeItem("token");
+    actions.getUser("");
+  }
 
   const SidebarContent = (
     <Box p={2} height="100%">
       <LogoIcon />
       <Box mt={2}>
         <List>
-          {Menuitems.map((item, index) => (
-            <List component="li" disablePadding key={item.title}>
-              <NextLink href={item.href}>
+          {
+            Menuitems.map((item, index) => (
+              <List component="li" disablePadding key={item.title}>
+
+                <NextLink href={`${item.href === "/profile" ? userdata && item.href + "/" + userdata.name : item.href}`}>
+
+                  <ListItem
+                    onClick={() => handleClick(index)}
+                    button
+                    selected={location === `${item.href === "/profile" ? userdata && item.href + "/" + userdata.name : item.href}`}
+                    sx={{
+                      mb: 1,
+                      ...(location === `${item.href === "/profile" ? userdata && item.href + "/" + userdata.name : item.href}` && {
+                        color: "white",
+                        backgroundColor: (theme) =>
+                          `${theme.palette.primary.main}!important`,
+                      }),
+                    }}>
+
+                    <ListItemIcon>
+                      <FeatherIcon
+                        style={{
+                          color: `${location === `${item.href === "/profile" ? userdata && item.href + "/" + userdata.name : item.href}` ? "white" : ""} `,
+                        }}
+                        icon={item.icon}
+                        width="20"
+                        height="20"
+                      />
+                    </ListItemIcon>
+
+                    <ListItemText onClick={onSidebarClose}>
+                      {item.title}
+                    </ListItemText>
+
+                  </ListItem>
+
+                </NextLink>
+
+              </List>
+            ))
+          }
+        </List>
+        <Divider />
+
+
+        <List component="li">
+          {
+            userdata
+              ? <NextLink href="">
+
                 <ListItem
-                  onClick={() => handleClick(index)}
+                  onClick={() => handleClick(13)}
                   button
-                  selected={location === item.href}
-                  sx={{
-                    mb: 1,
-                    ...(location === item.href && {
-                      color: "white",
-                      backgroundColor: (theme) =>
-                        `${theme.palette.primary.main}!important`,
-                    }),
-                  }}
                 >
+
                   <ListItemIcon>
                     <FeatherIcon
-                      style={{
-                        color: `${location === item.href ? "white" : ""} `,
-                      }}
-                      icon={item.icon}
+                      icon="log-out"
                       width="20"
                       height="20"
                     />
                   </ListItemIcon>
 
-                  <ListItemText onClick={onSidebarClose}>
-                    {item.title}
+                  <ListItemText onClick={() => { logoutUser(), onSidebarClose }}>
+                    Logout
                   </ListItemText>
+
                 </ListItem>
+
               </NextLink>
-            </List>
-          ))}
+              : <>
+                <NextLink href="/login">
+
+                  <ListItem
+                    onClick={() => handleClick(11)}
+                    button
+                    selected={location === "/login"}
+                    sx={{
+                      mb: 1,
+                      ...(location === "/login" && {
+                        color: "white",
+                        backgroundColor: (theme) =>
+                          `${theme.palette.primary.main}!important`,
+                      }),
+                    }}>
+
+                    <ListItemIcon>
+                      <FeatherIcon
+                        style={{
+                          color: `${location === "/login" ? "white" : ""} `,
+                        }}
+                        icon="log-in"
+                        width="20"
+                        height="20"
+                      />
+                    </ListItemIcon>
+
+                    <ListItemText onClick={onSidebarClose}>
+                      Login
+                    </ListItemText>
+
+                  </ListItem>
+
+                </NextLink>
+
+                <NextLink href="/signup">
+
+                  <ListItem
+                    onClick={() => handleClick(12)}
+                    button
+                    selected={location === "/signup"}
+                    sx={{
+                      ...(location === "/signup" && {
+                        color: "white",
+                        backgroundColor: (theme) =>
+                          `${theme.palette.primary.main}!important`,
+                      }),
+                    }}>
+
+                    <ListItemIcon>
+                      <FeatherIcon
+                        style={{
+                          color: `${location === "/signup" ? "white" : ""} `,
+                        }}
+                        icon="user-plus"
+                        width="20"
+                        height="20"
+                      />
+                    </ListItemIcon>
+
+                    <ListItemText onClick={onSidebarClose}>
+                      Signup
+                    </ListItemText>
+
+                  </ListItem>
+
+                </NextLink>
+              </>
+          }
+
         </List>
+
       </Box>
       <Divider />
       <Category />
       <Divider />
       <Ratings />
-    </Box>
+    </Box >
   );
   if (lgUp) {
     return (

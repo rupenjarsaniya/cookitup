@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   experimentalStyled,
   useMediaQuery,
@@ -8,6 +8,10 @@ import {
 import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
 import Footer from "./footer/Footer";
+import { useDispatch, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actionCreators } from '../../States/index';
+import axios from 'axios';
 
 const MainWrapper = experimentalStyled("div")(() => ({
   display: "flex",
@@ -34,6 +38,32 @@ const FullLayout = ({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = React.useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = React.useState(false);
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+
+  const dispatch = useDispatch();
+
+  const actions = bindActionCreators(actionCreators, dispatch);
+
+  const userdata = useSelector((state) => state.user);
+
+  useEffect(() => {
+
+    const getUser = async () => {
+      const res = await axios.get("http://localhost:3000/api/getuser", {
+        headers: {
+          "token": token
+        }
+      });
+
+      if (res.status === 200) {
+        actions.getUser(res.data);
+      }
+    }
+
+    const token = localStorage.getItem('token');
+    if (token) getUser();
+
+  }, []);
+
   return (
     <MainWrapper>
       <Header

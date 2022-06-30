@@ -6,14 +6,25 @@ import {
   Box,
   Menu,
   Typography,
-  Link,
   ListItemButton,
   List,
   ListItemText,
   Button,
   Divider,
 } from "@mui/material";
+import { useSelector, useDispatch } from 'react-redux';
+import Link from 'next/link';
+import { bindActionCreators } from 'redux';
+import { actionCreators } from '../../../States/index';
+
 const ProfileDD = () => {
+
+  const userdata = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+
+  const actions = bindActionCreators(actionCreators, dispatch);
+
   const [anchorEl4, setAnchorEl4] = React.useState(null);
 
   const handleClick4 = (event) => {
@@ -23,6 +34,12 @@ const ProfileDD = () => {
   const handleClose4 = () => {
     setAnchorEl4(null);
   };
+
+  const logoutUser = () => {
+    localStorage.removeItem("token");
+    actions.getUser("");
+  }
+
   return (
     <>
       <Button
@@ -34,7 +51,7 @@ const ProfileDD = () => {
       >
         <Box display="flex" alignItems="center">
           <Image
-            src={userimg}
+            src={`${userdata && userdata.profileimg ? userdata.profileimg : "/userlogo.png"}`}
             alt={userimg}
             width="30"
             height="30"
@@ -65,7 +82,7 @@ const ProfileDD = () => {
                 ml: 1,
               }}
             >
-              Julia
+              {userdata ? userdata?.name : "ADMIN"}
             </Typography>
             <FeatherIcon icon="chevron-down" width="20" height="20" />
           </Box>
@@ -90,27 +107,43 @@ const ProfileDD = () => {
               aria-label="secondary mailbox folder"
               onClick={handleClose4}
             >
-              <ListItemButton>
-                <ListItemText primary="Dashboard" />
-              </ListItemButton>
-              <ListItemButton>
-                <ListItemText primary="My Profile" />
-              </ListItemButton>
-              <ListItemButton>
-                <ListItemText primary="Edit Profile" />
-              </ListItemButton>
-              <ListItemButton>
-                <ListItemText primary="Change Password" />
-              </ListItemButton>
+              <Link href={'/dashboard'}>
+                <ListItemButton>
+                  <ListItemText primary="Dashboard" />
+                </ListItemButton>
+              </Link>
+              <Link href={'/profile/' + userdata?.name}>
+                <ListItemButton>
+                  <ListItemText primary="My Profile" />
+                </ListItemButton>
+              </Link>
+              <Link href={'/updateprofile'}>
+                <ListItemButton>
+                  <ListItemText primary="Edit Profile" />
+                </ListItemButton>
+              </Link>
+              <Link href={'/changepassword'}>
+                <ListItemButton>
+                  <ListItemText primary="Change Password" />
+                </ListItemButton>
+              </Link>
             </List>
           </Box>
           <Divider />
           <Box p={2}>
-            <Link to="/" >
-              <Button fullWidth variant="contained" color="primary">
-                Logout
-              </Button>
-            </Link>
+            {
+              userdata ?
+                <Link href={""} >
+                  <Button fullWidth variant="contained" color="primary" onClick={logoutUser}>
+                    Logout
+                  </Button>
+                </Link>
+                : <Link href={"/login"} >
+                  <Button fullWidth variant="contained" color="primary">
+                    Login
+                  </Button>
+                </Link>
+            }
           </Box>
         </Box>
       </Menu>

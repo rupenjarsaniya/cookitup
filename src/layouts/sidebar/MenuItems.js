@@ -29,16 +29,6 @@ const Menuitems = [
     icon: "info",
     href: "/about",
   },
-  {
-    title: "Login",
-    icon: "log-in",
-    href: "/login",
-  },
-  {
-    title: "Signup",
-    icon: "user-plus",
-    href: "/signup",
-  },
 ];
 
 export default Menuitems;

@@ -14,7 +14,7 @@ handler.post(async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
 
-        if (!user) throw new ErrorHandler(httpStatusCodes.NOT_FOUND, "User not found");
+        if (!user) throw new ErrorHandler(httpStatusCodes.BAD_REQUEST, "User not found");
 
         const comparePass = await bcrypt.compare(req.body.password, user.password);
 

@@ -14,7 +14,12 @@ handler.use(upload.single('profileimg'));
 handler.post(async (req, res) => {
     // Change http:// to protocol
     const url = 'http://' + req.headers.host;
+    let profileimg = "";
     try {
+        if (req.file) {
+            profileimg = url + '/userprofileimg/' + req.file.filename;
+        }
+
         const user = await User.findOne({ email: req.body.email });
 
         if (user) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "This email id already in use");
@@ -23,7 +28,7 @@ handler.post(async (req, res) => {
             name: req.body.name,
             email: req.body.email,
             password: req.body.password,
-            profileimg: url + '/userprofileimg/' + req.file.filename
+            profileimg: profileimg
         });
 
         const saveUser = await createUser.save();
@@ -39,10 +44,10 @@ handler.post(async (req, res) => {
 
 });
 
-export default handler;
-
 export const config = {
     api: {
         bodyParser: false, // Disallow body parsing, consume as stream
     },
 };
+
+export default handler;

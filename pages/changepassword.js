@@ -16,6 +16,11 @@ import {
 import BaseCard from "../src/components/baseCard/BaseCard";
 import Link from 'next/link';
 
+const handleChangePass = () => {
+    console.log("values");
+}
+
+
 const Changepassword = () => {
     return (
         <>
@@ -27,20 +32,27 @@ const Changepassword = () => {
                                 id="pass-basic"
                                 label="Current Password"
                                 type="password"
+                                name="currentpassword"
                                 variant="outlined"
                             />
+
+
                             <TextField
                                 id="pass-basic"
                                 label="New Password"
                                 type="password"
+                                name="password"
                                 variant="outlined"
                             />
+
                             <TextField
                                 id="pass-basic"
                                 label="New Confirm Password"
                                 type="password"
+                                name="confirmpassword"
                                 variant="outlined"
                             />
+
                             <FormControlLabel
                                 control={<Checkbox defaultChecked />}
                                 label="Show Password"
@@ -52,7 +64,7 @@ const Changepassword = () => {
                             </Link>
                         </Stack>
                         <br />
-                        <Button variant="contained" mt={2}>
+                        <Button type="submit" variant="contained" mt={2}>
                             Change Password
                         </Button>
                     </BaseCard>

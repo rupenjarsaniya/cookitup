@@ -3,13 +3,10 @@ import nextConnect from "next-connect";
 
 const connecter = async (req, res, next) => {
     try {
-        await mongoose.connect(process.env.MONGO_URI, (error, con) => {
-
-            error ? console.log("Something went wrong while connection to datbase") :
-                console.log("Connection between database and " + con.host + " established")
-
-            return next();
-        });
+        if (!mongoose.connections[0].readyState) {
+            await mongoose.connect(process.env.MONGO_URI);
+        }
+        return next();
     }
     catch (error) {
         console.log(error);

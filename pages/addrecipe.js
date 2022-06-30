@@ -3,6 +3,11 @@ import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import BaseCard from '../src/components/baseCard/BaseCard'
 
+const handleNewRecipe = () => {
+    console.log("values");
+}
+
+
 const Addrecipe = () => {
     return (
         <>
@@ -16,16 +21,20 @@ const Addrecipe = () => {
                         <FormControl style={{ marginBottom: 30 }}>
                             <Stack spacing={3}>
                                 <TextField
-                                    id="name-basic"
+                                    id="name"
+                                    name="title"
                                     label="Name of Recipe"
                                     variant="outlined"
                                 />
+
                                 <TextField
                                     id="outlined-multiline-static"
+                                    name="ingredients"
                                     label="Ingredients (eg. 1 cup all purpose flour (Maida), Water to Knead dough, 2 tbsp oil)"
                                     multiline
                                     rows={4}
                                 />
+
                                 <input type="file" id="actual-btn" name="recipeimg" style={{ marginBottom: 20 }} />
 
                                 <Image src="/kachori.jpg" alt="kachori" width={400} height={300} style={{ borderRadius: 10 }} />
@@ -84,7 +93,7 @@ const Addrecipe = () => {
                                 />
                             </Stack>
                         </FormControl>
-                        <Button variant="contained" style={{ display: "block" }}>
+                        <Button type="submit" variant="contained" style={{ display: "block" }}>
                             Submit
                         </Button>
                     </BaseCard>

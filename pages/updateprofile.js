@@ -17,6 +17,10 @@ import {
 import BaseCard from "../src/components/baseCard/BaseCard";
 import Link from 'next/link';
 
+const handleUpdateProfile = () => {
+    console.log("values");
+}
+
 const Updateprofile = () => {
     return (
         <>
@@ -32,12 +36,17 @@ const Updateprofile = () => {
                         </Typography>
                         <Stack spacing={3}>
                             <TextField
-                                id="name-basic"
+                                id="name"
+                                name="name"
                                 label="Name"
                                 variant="outlined"
                                 type="text"
                             />
-                            <TextField id="email-basic" label="Email" variant="outlined" />
+
+
+                            <TextField id="email" name="email" label="Email" variant="outlined" />
+
+
                             <Typography variant="div" style={{ color: "gray" }}>
                                 Select Profile Photo
                             </Typography>
@@ -49,7 +58,7 @@ const Updateprofile = () => {
                             </Link>
                         </Stack>
                         <br />
-                        <Button variant="contained" mt={2}>
+                        <Button type="submit" onSubmit={handleUpdateProfile} variant="contained" mt={2}>
                             Update Profile
                         </Button>
                     </BaseCard>
