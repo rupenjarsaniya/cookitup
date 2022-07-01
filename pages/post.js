@@ -12,7 +12,6 @@ import {
     ListItemButton,
     ListItemText,
 } from "@mui/material";
-import userimg1 from "../assets/images/users/1.jpg";
 import Image from 'next/image';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -178,7 +177,7 @@ const post = ({ post }) => {
                 {
                     post.comments.map((user) => <Typography variant="div" style={{ display: "block" }} pb={1} mb={3} key={user._id}>
                         <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                            <Avatar alt="Remy Sharp" src={userimg1} />
+                            <Avatar alt="Remy Sharp" src="userlogo.png" />
                             <Typography variant="h5" style={{}} ml={1}>
                                 {user.name}
                             </Typography>
