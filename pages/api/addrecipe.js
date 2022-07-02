@@ -13,13 +13,13 @@ handler.use(AuthenticateUser);
 handler.use(uploadfoodimg.single('foodimg'));
 
 handler.post(async (req, res) => {
-
+    console.log(req.body);
+    console.log(req.file);
     try {
-        const url = 'http://' + req.headers.host;
 
         let foodImage = "";
 
-        if (req.file) foodImage = url + '/foodimg/' + req.file.filename;
+        if (req.file) foodImage = '/foodimg/' + req.file.filename;
 
         const recipe = await Recipe.find({ user: req.userId, title: req.body.title });
 
