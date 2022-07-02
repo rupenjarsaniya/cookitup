@@ -1,28 +1,25 @@
 import nextConnect from "next-connect";
 import Feedback from "../../models/Feedback";
-import User from "../../models/User";
 import connectDb from "../../database/database";
 import ErrorHandler from "../../helpers/Errorhandler";
 import httpStatusCodes from "../../helpers/httpStatusCodes";
+import AuthenticateUser from "../../middlewares/authenticateUser";
 
 const handler = nextConnect();
 
 handler.use(connectDb);
+handler.use(AuthenticateUser);
 
 handler.post(async (req, res) => {
 
     try {
 
-        const user = await User.findById(req.body.userId);
-
-        if (!user) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Not allowed to give feedback");
-
-        const fb = await Feedback.findOne({ user: req.body.userId });
+        const fb = await Feedback.findOne({ user: req.userId });
 
         if (!fb) {
 
             const createFeedbackData = new Feedback({
-                user: req.body.userId,
+                user: req.userId,
                 name: req.body.name,
                 message: req.body.message,
                 rating: req.body.rating
@@ -37,7 +34,7 @@ handler.post(async (req, res) => {
 
         }
 
-        fb.user = req.body.userId;
+        fb.user = req.userId;
         fb.name = req.body.name;
         fb.message = req.body.message;
         fb.rating = req.body.rating;

@@ -11,7 +11,7 @@ const handler = nextConnect();
 handler.use(connectDb);
 handler.use(AuthenticateUser);
 
-handler.post(async (req, res) => {
+handler.put(async (req, res) => {
     console.log(req.body);
     try {
 
@@ -19,11 +19,11 @@ handler.post(async (req, res) => {
 
         if (req.body.password !== req.body.confirmpassword) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Passwords not matched");
 
-        if (req.body.password === req.body.currentpassword) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "New password cannot same as current password");
-
         const comparePass = await bcrypt.compare(req.body.currentpassword, user.password);
 
         if (!comparePass) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Current password is wrong");
+
+        if (req.body.password === req.body.currentpassword) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "New password cannot same as current password");
 
         user.password = req.body.password;
 

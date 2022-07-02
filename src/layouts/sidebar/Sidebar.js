@@ -6,11 +6,7 @@ import {
   Drawer,
   useMediaQuery,
   List,
-  Link,
-  Button,
-  Typography,
   ListItem,
-  Collapse,
   ListItemIcon,
   ListItemText,
   Divider,
@@ -24,12 +20,16 @@ import Category from "./Category";
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../../../States/index';
+import axios from 'axios';
 
 const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
 
   const dispatch = useDispatch();
 
   const actions = bindActionCreators(actionCreators, dispatch);
+
+  const [totalRecipes, setTotalRecipes] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
 
   const [open, setOpen] = React.useState(true);
 
@@ -52,6 +52,16 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
     localStorage.removeItem("token");
     actions.getUser("");
   }
+
+
+  useEffect(() => {
+    const fetchSome = async () => {
+      const res = await axios.get('http://localhost:3000/api/count');
+      setTotalRecipes(res.data.recipes);
+      setTotalUsers(res.data.users);
+    }
+    fetchSome();
+  }, []);
 
   const SidebarContent = (
     <Box p={2} height="100%">
@@ -204,7 +214,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
       <Divider />
       <Category />
       <Divider />
-      <Ratings />
+      <Ratings totalRecipes={totalRecipes} totalUsers={totalUsers} />
     </Box >
   );
   if (lgUp) {
@@ -225,6 +235,8 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
       </Drawer>
     );
   }
+
+
   return (
     <Drawer
       anchor="left"

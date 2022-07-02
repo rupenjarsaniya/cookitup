@@ -15,7 +15,6 @@ handler.use(upload.single('profileimg'));
 handler.put(async (req, res) => {
     // Change http:// to protocol
     try {
-        const url = 'http://' + req.headers.host;
 
         const { name, email, gender, location, expertin, expirence } = req.body;
 
@@ -27,7 +26,7 @@ handler.put(async (req, res) => {
         if (location) { userobj.location = location };
         if (expertin) { userobj.expertin = expertin };
         if (expirence) { userobj.expirence = expirence };
-        if (req.file) { userobj.profileimg = url + '/userprofileimg/' + req.file.filename };
+        if (req.file) { userobj.profileimg = '/userprofileimg/' + req.file.filename };
 
         const updateUser = await User.findByIdAndUpdate(req.userId, { $set: userobj }, { new: true, runValidators: true });
 

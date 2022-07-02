@@ -57,7 +57,9 @@ const Login = () => {
                 });
 
                 setUserdata({ email: "", password: "" });
-                router.push("/");
+                setTimeout(() => {
+                    router.push("/");
+                }, 1000);
             }
 
             else {

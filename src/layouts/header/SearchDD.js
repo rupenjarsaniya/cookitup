@@ -41,15 +41,26 @@ const SearchDD = () => {
               ml: "auto",
             }}
           >
-            <IconButton
-              color="inherit"
-              sx={{
-                color: (theme) => theme.palette.grey.A200,
-              }}
-              onClick={handleDrawerClose2}
-            >
-              <FeatherIcon icon="x-circle" />
-            </IconButton>
+            <Typography variant="div" style={{ display: 'flex' }}>
+
+              <IconButton
+                color="inherit"
+                sx={{
+                  color: (theme) => theme.palette.grey.A200,
+                }}
+              >
+                <FeatherIcon icon="search" />
+              </IconButton>
+              <IconButton
+                color="inherit"
+                sx={{
+                  color: (theme) => theme.palette.grey.A200,
+                }}
+                onClick={handleDrawerClose2}
+              >
+                <FeatherIcon icon="x-circle" />
+              </IconButton>
+            </Typography>
           </Box>
         </Box>
       </Drawer>

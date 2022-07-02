@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import {
   Grid,
   Button,
@@ -12,15 +12,85 @@ import {
   Avatar,
 } from "@mui/material";
 import BaseCard from "../src/components/baseCard/BaseCard";
-import userimg1 from "../assets/images/users/1.jpg";
-import userimg2 from "../assets/images/users/2.jpg";
-import userimg3 from "../assets/images/users/3.jpg";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import mongoose from "mongoose";
+import Feedback from "../models/Feedback";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const About = () => {
-  const [value, setValue] = React.useState(0);
+const About = ({ feedbacks }) => {
+
+  const userdata = useSelector(state => state.user);
+
+  const [feedbackData, setFeedbackData] = useState({ rating: "", message: "" });
+
+  const handleFeedbackData = (e) => setFeedbackData({ ...feedbackData, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+
+    try {
+      feedbackData.name = userdata.name;
+      feedbackData.userId = userdata._id;
+      const res = await axios.post('http://localhost:3000/api/feedback', feedbackData, {
+        headers: { "content-type": "application/json", "token": token }
+      });
+
+      if (res.status === 200) {
+        toast.success(res.data.message, {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setFeedbackData({ rating: "", message: "" });
+      }
+      else {
+        toast.error(res.response.data, {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    }
+
+    catch (error) {
+      toast.error(error.response.data, {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
+
   return (
     <Grid container spacing={0}>
       <Grid item xs={12} lg={12}>
+        <ToastContainer
+          position="top-left"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <Card>
           <CardContent>
             <Typography variant="h3">Cooking</Typography>
@@ -47,65 +117,65 @@ const About = () => {
             </Typography>
           </CardContent>
         </Card>
+
         <BaseCard title="Any Suggestions?">
-          <Stack spacing={2}>
-            <Typography variant="div">
-              <Typography component="legend" mb={1}>Give Rate</Typography>
-              <Rating
-                name="simple-controlled"
-                value={value}
-                onChange={(event, newValue) => {
-                  setValue(newValue);
-                }}
+          <form onSubmit={handleSubmit}>
+
+            <Stack spacing={2}>
+              <Typography variant="div">
+                <Typography component="legend" mb={1}>Give Rate</Typography>
+                <Rating
+                  name="rating"
+                  value={feedbackData.rating}
+                  onChange={handleFeedbackData}
+                />
+              </Typography>
+              <TextField
+                id="outlined-multiline-static"
+                label="Feedback"
+                name="message"
+                multiline
+                rows={2}
+                value={feedbackData.message}
+                onChange={handleFeedbackData}
+                required
               />
-            </Typography>
-            <TextField
-              id="outlined-multiline-static"
-              label="Feedback"
-              multiline
-              rows={2}
-            />
-          </Stack>
-          <br />
-          <Button variant="contained" mt={2}>
-            Send
-          </Button>
+            </Stack>
+            <br />
+            <Button type="submit" variant="contained">
+              Send
+            </Button>
+          </form>
+
           <Typography variant="div" mt={5} style={{ display: "block" }}>
-            <Typography variant="div" style={{ display: "block" }} pb={1} mb={3}>
-              <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                <Avatar alt="Remy Sharp" src={userimg1} />
-                <Typography variant="h5" style={{}} ml={1}>
-                  Rupen Jarsaniya
-                </Typography>
-              </Typography>
-              <Typography variant="div" style={{ display: "block", color: "gray" }} mt={2}>
-                Nice website, i learn many cooking recipe
-              </Typography>
-            </Typography>
 
-            <Typography variant="div" style={{ display: "block" }} pb={1} mb={3}>
-              <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                <Avatar alt="Remy Sharp" src={userimg1} />
-                <Typography variant="h5" style={{}} ml={1}>
-                  Bhagyashree Thombre
+            {
+              feedbacks.map((feedback) => {
+                return <Typography variant="div" style={{ display: "block" }} pb={1} mb={3} key={feedback._id}>
+                  <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                    <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                      <Avatar alt="Remy Sharp" src="" />
+                      <Typography variant="h5" ml={1}>
+                        {feedback.name}
+                      </Typography>
+                    </Typography>
+                    <Typography variant="h5" style={{ fontSize: 10, color: 'gray' }}>
+                      {new Date(feedback.createdAt).toLocaleString()}
+                    </Typography>
+                  </Typography>
+                  <Rating
+                    name="rating"
+                    value={feedback.rating}
+                    readOnly
+                    style={{ fontSize: 15, marginTop: 10 }}
+                  />
+                  <Typography variant="div" style={{ display: "block", color: "gray" }}>
+                    {feedback.message}
+                  </Typography>
                 </Typography>
-              </Typography>
-              <Typography variant="div" style={{ display: "block", color: "gray" }} mt={2}>
-                Cool website
-              </Typography>
-            </Typography>
+              })
+            }
 
-            <Typography variant="div" style={{ display: "block" }} pb={1} mb={3}>
-              <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                <Avatar alt="Remy Sharp" src={userimg1} />
-                <Typography variant="h5" style={{}} ml={1}>
-                  Pratham Kansara
-                </Typography>
-              </Typography>
-              <Typography variant="div" style={{ display: "block", color: "gray" }} mt={2}>
-                Best Recipe website i never seen before
-              </Typography>
-            </Typography>
 
             <Typography variant="div" mt={3} style={{ display: "block", cursor: "pointer" }} color="primary">
               See all reviews
@@ -115,6 +185,16 @@ const About = () => {
       </Grid>
     </Grid>
   );
+}
+
+export async function getStaticProps(context) {
+  if (!mongoose.connections[0].readyState) {
+    await mongoose.connect(process.env.MONGO_URI);
+  }
+
+  const feedbacks = await Feedback.find();
+
+  return { props: { feedbacks: JSON.parse(JSON.stringify(feedbacks)) } }
 }
 
 export default About;
