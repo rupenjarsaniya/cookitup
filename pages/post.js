@@ -11,6 +11,7 @@ import {
     List,
     ListItemButton,
     ListItemText,
+    TextField,
 } from "@mui/material";
 import Image from 'next/image';
 import axios from 'axios';
@@ -31,7 +32,51 @@ const post = ({ post }) => {
 
     const userdata = useSelector((state) => state.user);
 
+    const [show, setShow] = useState(false);
     const [user, setUser] = useState({});
+    const [likes, setLikes] = useState(post.likes.length);
+    const [isliked, setIsliked] = useState();
+    const [issaved, setIssaved] = useState();
+    const [comments, setComments] = useState(post.comments.length);
+    const [commentData, setCommnetData] = useState({});
+
+    const handleLikes = async () => {
+        try {
+            await axios.put(`http://localhost:3000/api/like?id=${post._id}`, { userId: user._id });
+            setLikes(isliked ? likes - 1 : likes + 1);
+            setIsliked(!isliked);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleSaved = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            await axios.put(`http://localhost:3000/api/save?id=${post._id}`, {}, {
+                headers: { "content-type": "application/json", "token": token }
+            });
+            setIssaved(!issaved);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleComment = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.put(`http://localhost:3000/api/comment?id=${post._id}`, commentData, {
+                headers: { "content-type": "application/json" }
+            });
+            setComments(comments + 1);
+            setCommnetData({ ...commentData, comment: "" })
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
 
@@ -41,11 +86,20 @@ const post = ({ post }) => {
             if (res.status === 200) {
                 setUser(res.data);
             }
+
+            setIsliked(post.likes.includes(userdata._id))
+
+            setIssaved(post.saverecipeusers.includes(userdata._id))
+
+            setCommnetData({ name: userdata.name, comment: "", userId: userdata._id })
         }
 
-        fetchUser();
 
-    }, []);
+        if (userdata) {
+            fetchUser();
+        }
+
+    }, [userdata]);
 
     return (
         <Typography variant="div" style={{ display: "block", backgroundColor: "rgb(255, 255, 255)", borderRadius: 10 }} py={3} px={3} mb={3} key={post._id}>
@@ -101,10 +155,14 @@ const post = ({ post }) => {
                                         onClick={handleClose4}
                                     >
                                         <ListItemButton>
-                                            <ListItemText primary="Edit Recipe" />
+                                            <Link href={'/update/' + post._id}>
+                                                <ListItemText primary="Edit Recipe" />
+                                            </Link>
                                         </ListItemButton>
                                         <ListItemButton>
-                                            <ListItemText primary="Delete Recipe" />
+                                            <Link href={''}>
+                                                <ListItemText primary="Delete Recipe" />
+                                            </Link>
                                         </ListItemButton>
 
                                     </List>
@@ -152,47 +210,64 @@ const post = ({ post }) => {
             {/* Footer */}
             <Typography variant="div" style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" }}>
                 <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                    <IconButton aria-label="user">
-                        <FeatherIcon icon="heart" width="20" height="20" />
+                    <IconButton aria-label="heart" onClick={handleLikes}>
+                        <FeatherIcon icon="heart" width="20" height="20" strokeWidth='1' color={`${isliked ? "red" : "gray"}`} />
                     </IconButton>
-                    <IconButton aria-label="user">
-                        <FeatherIcon icon="message-circle" width="20" height="20" />
+                    <IconButton aria-label="message-circle" onClick={() => setShow(!show)}>
+                        <FeatherIcon icon="message-circle" width="20" height="20" strokeWidth='1' />
                     </IconButton>
-                    <IconButton aria-label="user">
-                        <FeatherIcon icon="bookmark" width="20" height="20" />
+                    <IconButton aria-label="bookmark" onClick={handleSaved}>
+                        <FeatherIcon icon="bookmark" width="20" height="20" strokeWidth='1' color={`${issaved ? "blue" : "gray"}`} />
                     </IconButton>
                 </Typography>
                 <Typography variant="div" fontSize={12} style={{ color: "gray" }}>
-                    {post.likes.length} Likes
-                    <IconButton aria-label="user">
-                        <FeatherIcon icon="circle" width="6" height="6" />
-                    </IconButton>
-                    {post.comments.length}  Comments
+                    {likes} Likes • {comments} Comments
                 </Typography>
             </Typography>
 
-            {/* Comments */}
-            <Typography variant="div" mt={2} style={{ display: "block" }}>
+            {/* Type a commnet */}
+            {show &&
+                <>
+                    <form style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: "100%", marginTop: 10, marginBottom: 30 }} onSubmit={handleComment}>
+                        <TextField
+                            type="comment"
+                            id="comment"
+                            name='comment'
+                            label={`Comment as ${user.name}`}
+                            variant="standard"
+                            required
+                            onChange={(e) => setCommnetData({ ...commentData, [e.target.name]: e.target.value })}
+                            value={commentData.comment}
+                            fullWidth
+                        />
+                        <IconButton aria-label="send" type="submit">
+                            <FeatherIcon icon="send" width="20" height="20" strokeWidth='1' />
+                        </IconButton>
+                    </form>
 
-                {
-                    post.comments.map((user) => <Typography variant="div" style={{ display: "block" }} pb={1} mb={3} key={user._id}>
-                        <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                            <Avatar alt="Remy Sharp" src="userlogo.png" />
-                            <Typography variant="h5" style={{}} ml={1}>
-                                {user.name}
+
+                    {/* Comments */}
+                    <Typography variant="div" mt={2} style={{ display: "block" }}>
+
+                        {
+                            post.comments.map((user) => <Typography variant="div" style={{ display: "block" }} pb={1} mb={3} key={user._id}>
+                                <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                                    <Avatar alt="Remy Sharp" src="userlogo.png" />
+                                    <Typography variant="h5" ml={1}>
+                                        {user.name}
+                                    </Typography>
+                                </Typography>
+                                <Typography variant="div" style={{ display: "block", color: "gray" }} mt={2}>
+                                    {user.comment}
+                                </Typography>
                             </Typography>
-                        </Typography>
-                        <Typography variant="div" style={{ display: "block", color: "gray" }} mt={2}>
-                            {user.comment}
-                        </Typography>
-                    </Typography>
-                    )
-                }
+                            )
+                        }
 
-                <Typography variant="div" mt={3} style={{ display: "block", cursor: "pointer" }} color="primary">
-                    See all comments
-                </Typography>
-            </Typography>
+                        <Typography variant="div" mt={3} style={{ display: "block", cursor: "pointer" }} color="primary">
+                            See all comments
+                        </Typography>
+                    </Typography></>}
         </Typography >
 
 

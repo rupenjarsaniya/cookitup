@@ -13,7 +13,6 @@ handler.use(AuthenticateUser);
 handler.use(uploadfoodimg.single('foodimg'));
 
 handler.put(async (req, res) => {
-
     try {
         const recipe = await Recipe.findById(req.query.id);
 
@@ -21,14 +20,12 @@ handler.put(async (req, res) => {
 
         if (recipe.user.toString() !== req.userId) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Not allowed to udpate recipe");
 
-        const url = 'http://' + req.headers.host;
-
         const { title, makingsteps, ingredients } = req.body;
 
         if (title) recipe.title = title;
         if (makingsteps) recipe.makingsteps = JSON.parse(makingsteps);
         if (ingredients) recipe.ingredients = ingredients;
-        if (req.file) recipe.foodimg = url + '/foodimg/' + req.file.filename;;
+        if (req.file) recipe.foodimg = '/foodimg/' + req.file.filename;;
 
         const updateRecipe = await recipe.save();
 

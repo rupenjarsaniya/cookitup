@@ -43,7 +43,6 @@ const Addrecipe = () => {
             console.log(res);
 
             if (res.status === 200) {
-                console.log(res.data);
                 toast.success(res.data.message, {
                     position: "top-left",
                     autoClose: 3000,
@@ -53,6 +52,7 @@ const Addrecipe = () => {
                     draggable: true,
                     progress: undefined,
                 });
+                router.push('/dashboard');
             }
             else {
                 console.log(res);
@@ -128,9 +128,7 @@ const Addrecipe = () => {
                                     <input type="file" id="actual-btn" name="foodimg" style={{ marginBottom: 20 }}
                                         onChange={handleRecipeData} />
 
-                                    <Image src="/kachori.jpg" alt="kachori" width={400} height={300} style={{ borderRadius: 10 }} />
-
-                                    <Typography variant="h2" color="primary" mb={5}>How to make?</Typography>
+                                    <Typography variant="h2" color="primary" mb={5} style={{ textAlign: "center" }}>How to make?</Typography>
 
                                     <TextField
                                         id="name-basic1"

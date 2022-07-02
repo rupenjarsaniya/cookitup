@@ -11,7 +11,7 @@ const handler = nextConnect();
 handler.use(connectDb);
 handler.use(AuthenticateUser);
 
-handler.post(async (req, res) => {
+handler.put(async (req, res) => {
 
     try {
 

@@ -13,8 +13,6 @@ handler.use(AuthenticateUser);
 handler.use(uploadfoodimg.single('foodimg'));
 
 handler.post(async (req, res) => {
-    console.log(req.body);
-    console.log(req.file);
     try {
 
         let foodImage = "";

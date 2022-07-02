@@ -24,7 +24,7 @@ const Slug = ({ user, error, recipes }) => {
                         style={{ borderRadius: "100%", margin: "auto" }}
                     />
                     <Typography variant="h5" mt={3} style={{ display: "block", fontWeight: 700, fontSize: 25 }}>
-                        {user.name.toUpperCase()}
+                        {user.name}
                     </Typography>
                     <Typography variant="h5" mt={1} style={{ display: "block", fontWeight: 300, color: "gray" }}>
                         Expert in Make {user.expertin}
