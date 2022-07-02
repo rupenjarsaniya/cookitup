@@ -50,7 +50,7 @@ const RecipeSchema = mongoose.Schema({
         type: Array,
         default: []
     }
-}, { Timestamps: true });
+}, { timestamps: true });
 
 mongoose.models = {};
 const Recipe = new mongoose.model("Recipe", RecipeSchema);
