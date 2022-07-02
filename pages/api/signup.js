@@ -12,12 +12,11 @@ handler.use(connectDb);
 handler.use(upload.single('profileimg'));
 
 handler.post(async (req, res) => {
-    // Change http:// to protocol
-    const url = 'http://' + req.headers.host;
+
     let profileimg = "";
     try {
         if (req.file) {
-            profileimg = url + '/userprofileimg/' + req.file.filename;
+            profileimg = '/userprofileimg/' + req.file.filename;
         }
 
         const user = await User.findOne({ email: req.body.email });

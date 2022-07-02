@@ -18,9 +18,10 @@ import mongoose from "mongoose";
 import Feedback from "../models/Feedback";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/router";
 
 const About = ({ feedbacks }) => {
-
+  const router = useRouter();
   const userdata = useSelector(state => state.user);
 
   const [feedbackData, setFeedbackData] = useState({ rating: "", message: "" });
@@ -31,6 +32,7 @@ const About = ({ feedbacks }) => {
 
     e.preventDefault();
     const token = localStorage.getItem('token');
+    if (!token) router.push('/login');
 
     try {
       feedbackData.name = userdata.name;
@@ -65,7 +67,7 @@ const About = ({ feedbacks }) => {
     }
 
     catch (error) {
-      toast.error(error.response.data, {
+      toast.error(error.data, {
         position: "top-left",
         autoClose: 3000,
         hideProgressBar: true,

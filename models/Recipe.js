@@ -17,7 +17,7 @@ const RecipeSchema = mongoose.Schema({
     },
     ingredients: {
         type: String,
-        minlength: [4, "Password must be atleast 4 character long"],
+        minlength: [4, "Ingredients must be atleast 4 character long"],
         required: true
     },
     foodimg: {

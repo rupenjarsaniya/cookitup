@@ -6,8 +6,10 @@ import {
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Post from './post';
+import { useRouter } from 'next/router';
 
 const Saverecipe = () => {
+    const router = useRouter();
 
     const [anchorEl4, setAnchorEl4] = React.useState(null);
 
@@ -54,7 +56,7 @@ const Saverecipe = () => {
         }
 
         if (token) fetchRecipes();
-
+        else router.push("/login");
 
     }, []);
 

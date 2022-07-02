@@ -17,6 +17,9 @@ import Image from 'next/image';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { format } from 'timeago.js'
 
 const post = ({ post }) => {
 
@@ -78,6 +81,53 @@ const post = ({ post }) => {
         }
     }
 
+    const handleDelete = async (id) => {
+
+        const token = localStorage.getItem('token');
+
+        try {
+            const res = await axios.delete(`http://localhost:3000/api/deleterecipe?id=${id}`, {
+                headers: { "token": token }
+            })
+
+            if (res.status === 200) {
+                toast.success(res.data.message, {
+                    position: "top-left",
+                    autoClose: 3000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+
+            else {
+                toast.error(res.response.data, {
+                    position: "top-left",
+                    autoClose: 3000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        }
+
+        catch (error) {
+            toast.error(error.response.data, {
+                position: "top-left",
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    }
+
     useEffect(() => {
 
         const fetchUser = async () => {
@@ -99,82 +149,97 @@ const post = ({ post }) => {
             fetchUser();
         }
 
-    }, [userdata]);
+    }, [userdata, handleDelete]);
 
     return (
         <Typography variant="div" style={{ display: "block", backgroundColor: "rgb(255, 255, 255)", borderRadius: 10 }} py={3} px={3} mb={3} key={post._id}>
-
+            <ToastContainer
+                position="top-left"
+                autoClose={3000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
             {/* Header */}
-            <Typography variant="div" style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" }}>
-                <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                    <Link href={`${"profile/" + user.name}`} >
-                        <Image
-                            src={`${user.profileimg ? user.profileimg : "/userlogo.png"}`}
-                            alt={`${user.profileimg ? user.profileimg : "/userlogo.png"}`}
-                            width={30}
-                            height={30}
-                            className="roundedCircle"
-                            style={{ borderRadius: "100%", cursor: "pointer" }}
-                        />
-                    </Link>
-                    <Typography variant="h5" ml={2}>
-                        {post.title}
-                    </Typography>
-                </Typography>
+            <Typography variant="div" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Typography variant="div" style={{ display: "flex", alignItems: "center", justifyContent: 'space-between', width: "100%" }}>
+                    <Typography variant="div" style={{ display: "flex", alignItems: "center" }}>
+                        <Link href={`${"profile/" + user.name}`} >
+                            <Image
+                                src={`${user.profileimg ? user.profileimg : "/userlogo.png"}`}
+                                alt={`${user.profileimg ? user.profileimg : "/userlogo.png"}`}
+                                width={30}
+                                height={30}
+                                className="roundedCircle"
+                                style={{ borderRadius: "100%", cursor: "pointer" }}
+                            />
+                        </Link>
+                        <Typography variant="h5" ml={2}>
+                            {post.title}
+                        </Typography>
+                    </Typography >
+                    <Typography variant="div" style={{ display: "flex", alignItems: "center" }}>
+                        <Typography variant="div" style={{ fontSize: 14, color: "silver" }} mr={1}>
+                            {format(post.createdAt)}
+                        </Typography>
 
-                {
-                    userdata && user._id === userdata._id && <Typography variant="div">
-                        <Button
-                            aria-label="menu"
-                            color="inherit"
-                            aria-controls="profile-menu"
-                            aria-haspopup="true"
-                            onClick={handleClick4}
-                        >
-                            <Box display="flex" alignItems="center">
-                                <FeatherIcon icon="more-vertical" width="20" height="20" />
-                            </Box>
-                        </Button>
-                        <Menu
-                            id="profile-menu"
-                            anchorEl={anchorEl4}
-                            keepMounted
-                            open={Boolean(anchorEl4)}
-                            onClose={handleClose4}
-                            sx={{
-                                "& .MuiMenu-paper": {
-                                    width: "285px",
-                                },
-                            }}
-                        >
-                            <Box>
-                                <Box>
-                                    <List
-                                        component="nav"
-                                        aria-label="secondary mailbox folder"
-                                        onClick={handleClose4}
-                                    >
-                                        <ListItemButton>
-                                            <Link href={'/update/' + post._id}>
-                                                <ListItemText primary="Edit Recipe" />
-                                            </Link>
-                                        </ListItemButton>
-                                        <ListItemButton>
-                                            <Link href={''}>
-                                                <ListItemText primary="Delete Recipe" />
-                                            </Link>
-                                        </ListItemButton>
+                        {
+                            userdata && user._id === userdata._id && <Typography variant="div">
+                                <Button
+                                    aria-label="menu"
+                                    color="inherit"
+                                    aria-controls="profile-menu"
+                                    aria-haspopup="true"
+                                    onClick={handleClick4}
+                                >
+                                    <Box display="flex" alignItems="center">
+                                        <FeatherIcon icon="more-vertical" width="20" height="20" color="silver" />
+                                    </Box>
+                                </Button>
+                                <Menu
+                                    id="profile-menu"
+                                    anchorEl={anchorEl4}
+                                    keepMounted
+                                    open={Boolean(anchorEl4)}
+                                    onClose={handleClose4}
+                                    sx={{
+                                        "& .MuiMenu-paper": {
+                                            width: "285px",
+                                        },
+                                    }}
+                                >
+                                    <Box>
+                                        <Box>
+                                            <List
+                                                component="nav"
+                                                aria-label="secondary mailbox folder"
+                                                onClick={handleClose4}
+                                            >
+                                                <ListItemButton>
+                                                    <Link href={'/update/' + post._id}>
+                                                        <ListItemText primary="Edit Recipe" />
+                                                    </Link>
+                                                </ListItemButton>
+                                                <ListItemButton onClick={() => handleDelete(post._id)}>
+                                                    <ListItemText primary="Delete Recipe" />
+                                                </ListItemButton>
 
-                                    </List>
-                                </Box>
-                            </Box>
-                        </Menu>
+                                            </List>
+                                        </Box>
+                                    </Box>
+                                </Menu>
+                            </Typography>
+                        }
                     </Typography>
-                }
-            </Typography>
+                </Typography >
+            </Typography >
 
             {/* Content */}
-            <Typography variant="div" >
+            <Typography Typography variant="div" >
                 <Typography variant="div" style={{ display: "block", borderTop: "1px solid #cccccc" }} my={2}></Typography>
                 <Image src={`${post.foodimg ? post.foodimg : "/logo.png"}`} alt="recipeimg" width={400} height={300} style={{ borderRadius: 10 }} />
                 <Typography variant="h4" color="primary" >
@@ -226,7 +291,8 @@ const post = ({ post }) => {
             </Typography>
 
             {/* Type a commnet */}
-            {show &&
+            {
+                show &&
                 <>
                     <form style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: "100%", marginTop: 10, marginBottom: 30 }} onSubmit={handleComment}>
                         <TextField
@@ -267,7 +333,8 @@ const post = ({ post }) => {
                         <Typography variant="div" mt={3} style={{ display: "block", cursor: "pointer" }} color="primary">
                             See all comments
                         </Typography>
-                    </Typography></>}
+                    </Typography></>
+            }
         </Typography >
 
 

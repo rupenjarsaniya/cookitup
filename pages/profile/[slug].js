@@ -55,7 +55,7 @@ export async function getServerSideProps(context) {
 
     if (!userdata) { return { props: { error: 404 } } }
 
-    const recipes = await Recipe.find({ user: userdata._id });
+    const recipes = await Recipe.find({ user: userdata._id }).sort({ createdAt: -1 });
 
     if (!recipes) { return { props: { error: 404 } } }
 

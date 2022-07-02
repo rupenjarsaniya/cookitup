@@ -27,6 +27,7 @@ const Login = () => {
     const actions = bindActionCreators(actionCreators, dispatch);
 
     const [userdata, setUserdata] = useState({ email: "", password: "" });
+    const [show, setShow] = useState(false);
 
     const handleData = (e) => {
         setUserdata({ ...userdata, [e.target.name]: e.target.value });
@@ -126,7 +127,7 @@ const Login = () => {
                             <TextField
                                 id="Password"
                                 label="Password"
-                                type="password"
+                                type={`${show ? "text" : "password"}`}
                                 name="password"
                                 variant="outlined"
                                 required
@@ -136,17 +137,17 @@ const Login = () => {
                             />
 
                             <FormControlLabel
-                                control={<Checkbox defaultChecked />}
+                                control={<Checkbox />}
                                 label="Show Password"
                                 style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+                                onClick={() => setShow(!show)}
                             />
 
                             <Button type="submit" variant="contained">
                                 Log in
                             </Button>
-
                         </form>
-                        <Typography variant="div" mt={3} style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} color="primary">
+                        <Typography variant="div" mt={3} style={{ display: "flex", justifyContent: "center", alignItems: "center" }} color="primary">
                             <Link href={"/forgot"}  >
                                 <Typography variant="div" style={{ cursor: "pointer" }} color="primary">
                                     Forgot Password&nbsp; | &nbsp;

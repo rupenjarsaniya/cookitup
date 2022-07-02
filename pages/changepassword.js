@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Grid,
     Stack,
@@ -77,6 +77,11 @@ const Changepassword = () => {
             });
         }
     }
+
+    useEffect(() => {
+        if (!localStorage.getItem('token')) router.push("/login");
+
+    }, [router.query]);
 
     return (
         <>

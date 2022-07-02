@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 import FeatherIcon from "feather-icons-react";
 import { IconButton, Input, Box, Drawer, Typography } from "@mui/material";
+import { useRouter } from 'next/router';
 
 const SearchDD = () => {
   // drawer top
+  const router = useRouter();
   const [showDrawer2, setShowDrawer2] = useState(false);
+  const [recipeName, setRecipeName] = useState("");
 
   const handleDrawerClose2 = () => {
     setShowDrawer2(false);
   };
+
+  const handleSearch = () => {
+    router.push('/search/' + recipeName);
+    handleDrawerClose2();
+  }
   return (
     <>
       <IconButton
@@ -35,7 +43,7 @@ const SearchDD = () => {
         }}
       >
         <Box display="flex" alignItems="center">
-          <Input placeholder="Search here" aria-label="description" fullWidth />
+          <Input placeholder="Search here" aria-label="description" fullWidth onChange={(e) => setRecipeName(e.target.value)} />
           <Box
             sx={{
               ml: "auto",
@@ -48,6 +56,7 @@ const SearchDD = () => {
                 sx={{
                   color: (theme) => theme.palette.grey.A200,
                 }}
+                onClick={handleSearch}
               >
                 <FeatherIcon icon="search" />
               </IconButton>

@@ -161,10 +161,7 @@ const Forgot = () => {
     }
 
     useEffect(() => {
-        if (!localStorage.getItem('token')) router.push("/");
-    }, []);
-
-    useEffect(() => {
+        if (!localStorage.getItem('token')) router.push("/login");
         if (router.query.token) setShow(true);
         else setShow(false);
     }, [router.query]);

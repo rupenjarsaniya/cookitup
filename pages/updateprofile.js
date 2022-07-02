@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Grid,
     Stack,
@@ -67,7 +67,7 @@ const Updateprofile = () => {
                     draggable: true,
                     progress: undefined,
                 });
-                router.push("/profile/" + userdata.name);
+                router.push("/");
             }
             else {
                 toast.error(res.response.data, {
@@ -94,6 +94,12 @@ const Updateprofile = () => {
             });
         }
     }
+
+
+    useEffect(() => {
+        if (!localStorage.getItem('token')) router.push("/login");
+
+    }, [router.query]);
 
     return (
         <>

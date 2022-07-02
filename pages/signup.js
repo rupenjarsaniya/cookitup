@@ -34,6 +34,7 @@ const Signup = () => {
 
     const [userdata, setUserdata] = useState({ name: "", email: "", password: "", profileimg: "" });
     const [profileImgPre, setProfileImgPre] = useState("");
+    const [show, setShow] = useState(false);
 
     const handleData = (e) => {
         if (e.target.name === "profileimg") {
@@ -159,7 +160,7 @@ const Signup = () => {
                             <TextField
                                 id="pass-basic"
                                 label="Password"
-                                type="password"
+                                type={`${show ? "text" : "password"}`}
                                 name="password"
                                 variant="outlined"
                                 onChange={handleData}
@@ -186,9 +187,10 @@ const Signup = () => {
                             />
 
                             <FormControlLabel
-                                control={<Checkbox defaultChecked />}
+                                control={<Checkbox />}
                                 label="Show Password"
                                 style={{ width: "100%", marginTop: 20, marginBottom: 10 }}
+                                onClick={() => setShow(!show)}
                             />
 
                             <Button type="submit" variant="contained">
@@ -196,8 +198,7 @@ const Signup = () => {
                             </Button>
                         </form>
 
-
-                        <Typography variant="div" mt={2} style={{ display: "flex", alignItems: "center", justifyContent: "center" }} color="primary">
+                        <Typography variant="div" mt={3} style={{ display: "flex", alignItems: "center", justifyContent: "center" }} color="primary">
                             <Link href={"/login"}>
                                 <Typography variant="div" style={{ cursor: "pointer" }} color="primary">
                                     Login Here!

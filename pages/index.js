@@ -32,7 +32,7 @@ export async function getStaticProps(context) {
     await mongoose.connect(process.env.MONGO_URI);
   }
 
-  const recipes = await Recipe.find();
+  const recipes = await Recipe.find().sort({ createdAt: -1 });
 
   return { props: { recipes: JSON.parse(JSON.stringify(recipes)) } }
 }

@@ -17,8 +17,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from "next/router";
 
 const Dashboard = () => {
+
+    const router = useRouter();
 
     const [recipes, setRecipes] = useState([]);
 
@@ -76,6 +79,7 @@ const Dashboard = () => {
         }
 
         if (token) fetchRecipes();
+        else router.push("/login");
 
     }, [handleDeletePost]);
 
