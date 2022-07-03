@@ -51,7 +51,7 @@ export async function getServerSideProps(context) {
         await mongoose.connect(process.env.MONGO_URI);
     }
 
-    const userdata = await User.findOne({ name: context.query.slug });
+    const userdata = await User.findOne({ username: context.query.slug });
 
     if (!userdata) { return { props: { error: 404 } } }
 

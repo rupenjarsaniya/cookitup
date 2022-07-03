@@ -115,7 +115,7 @@ const ProfileDD = () => {
                   <ListItemText primary="Dashboard" />
                 </ListItemButton>
               </Link>
-              <Link href={'/profile/' + userdata?.name}>
+              <Link href={'/profile/' + userdata?.username}>
                 <ListItemButton>
                   <ListItemText primary="My Profile" />
                 </ListItemButton>

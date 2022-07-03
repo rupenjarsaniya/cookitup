@@ -173,7 +173,7 @@ const post = ({ post }) => {
             <Typography variant="div" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <Typography variant="div" style={{ display: "flex", alignItems: "center", justifyContent: 'space-between', width: "100%" }}>
                     <Typography variant="div" style={{ display: "flex", alignItems: "center" }}>
-                        <Link href={`${"profile/" + user.name}`} >
+                        <Link href={`${"profile/" + user.username}`} >
                             <Image
                                 src={`${user.profileimg ? user.profileimg : "/userlogo.png"}`}
                                 alt={`${user.profileimg ? user.profileimg : "/userlogo.png"}`}

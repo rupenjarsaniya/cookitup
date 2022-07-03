@@ -74,15 +74,15 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
             Menuitems.map((item, index) => (
               <List component="li" disablePadding key={item.title}>
 
-                <NextLink href={`${item.href === "/profile" ? userdata && item.href + "/" + userdata.name : item.href}`}>
+                <NextLink href={`${item.href === "/profile" ? userdata && item.href + "/" + userdata.username : item.href}`}>
 
                   <ListItem
                     onClick={() => handleClick(index)}
                     button
-                    selected={location === `${item.href === "/profile" ? userdata && item.href + "/" + userdata.name : item.href}`}
+                    selected={location === `${item.href === "/profile" ? userdata && item.href + "/" + userdata.username : item.href}`}
                     sx={{
                       mb: 1,
-                      ...(location === `${item.href === "/profile" ? userdata && item.href + "/" + userdata.name : item.href}` && {
+                      ...(location === `${item.href === "/profile" ? userdata && item.href + "/" + userdata.username : item.href}` && {
                         color: "white",
                         backgroundColor: (theme) =>
                           `${theme.palette.primary.main}!important`,
@@ -92,7 +92,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
                     <ListItemIcon>
                       <FeatherIcon
                         style={{
-                          color: `${location === `${item.href === "/profile" ? userdata && item.href + "/" + userdata.name : item.href}` ? "white" : ""} `,
+                          color: `${location === `${item.href === "/profile" ? userdata && item.href + "/" + userdata.username : item.href}` ? "white" : ""} `,
                         }}
                         icon={item.icon}
                         width="20"

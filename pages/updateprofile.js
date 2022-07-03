@@ -36,8 +36,6 @@ const Updateprofile = () => {
     const actions = bindActionCreators(actionCreators, dispatch);
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string()
-            .min(3, 'Username must be at least 3 characters'),
         name: Yup.string()
             .min(3, 'Name must be at least 3 characters'),
         email: Yup.string()
@@ -49,7 +47,7 @@ const Updateprofile = () => {
     const { register, handleSubmit, reset, formState } = useForm(formOptions);
     const { errors } = formState;
 
-    const [updateData, setUpdateData] = useState({ username: "", name: "", email: "", profileimg: "" });
+    const [updateData, setUpdateData] = useState({ name: "", email: "", profileimg: "" });
 
     const handleUpdateData = (e) => {
         if (e.target.name === 'profileimg') {
@@ -64,7 +62,6 @@ const Updateprofile = () => {
         try {
             const token = localStorage.getItem('token');
             const formdata = new FormData();
-            formdata.set("username", updateData.username);
             formdata.set("name", updateData.name);
             formdata.set("email", updateData.email);
             formdata.set("profileimg", updateData.profileimg);
@@ -143,19 +140,7 @@ const Updateprofile = () => {
                         </Typography>
                         <form className="form" onSubmit={handleSubmit(handleRegister)}>
 
-                            <TextField
-                                id="username"
-                                name="username"
-                                label="Username"
-                                variant="outlined"
-                                type="text"
-                                {...register('username')}
-                                onChange={handleUpdateData}
-                            // value={userdata.username}
-                            />
-                            {
-                                errors.username && <span style={{ color: "red", fontSize: 13 }}>{errors.username.message}</span>
-                            }
+
 
                             <TextField
                                 id="name"
