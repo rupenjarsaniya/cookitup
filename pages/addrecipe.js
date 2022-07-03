@@ -57,7 +57,7 @@ const Addrecipe = () => {
             formData.set("foodimg", recipeData.foodimg);
             formData.set("makingsteps", JSON.stringify(steps));
             console.log(recipeData.foodimg);
-            const res = await axios.post('http://localhost:3000/api/addrecipe', formData, {
+            const res = await axios.post(`${process.env.PROD_URL}/api/addrecipe`, formData, {
                 headers: { "content-type": "multipart/form-data", "token": token }
             });
 

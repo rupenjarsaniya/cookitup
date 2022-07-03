@@ -55,7 +55,7 @@ const Login = () => {
 
         try {
 
-            const res = await axios.post('http://localhost:3000/api/login', userdata, {
+            const res = await axios.post(`${process.env.PROD_URL}/api/login`, userdata, {
                 headers: { "content-type": "application/json" }
             });
 

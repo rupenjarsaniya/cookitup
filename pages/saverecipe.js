@@ -30,7 +30,7 @@ const Saverecipe = () => {
         const fetchRecipes = async () => {
             try {
 
-                const currentUser = await axios.get('http://localhost:3000/api/getuser', {
+                const currentUser = await axios.get(`${process.env.PROD_URL}/api/getuser`, {
                     headers: { "token": token }
                 });
 
@@ -39,7 +39,7 @@ const Saverecipe = () => {
                     for (let index = 0; index < currentUser.data.saverecipe.length; index++) {
                         const id = currentUser.data.saverecipe[index];
 
-                        const res = await axios.get('http://localhost:3000/api/getonerecipe?id=' + id);
+                        const res = await axios.get(`${process.env.PROD_URL}/api/getonerecipe?id=` + id);
                         if (res.status === 200) {
                             savedRecipes.push(res.data.recipe);
                         }

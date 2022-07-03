@@ -46,7 +46,7 @@ const Post = ({ post }) => {
     const handleLikes = async () => {
         const token = localStorage.getItem('token');
         try {
-            await axios.put(`http://localhost:3000/api/like?id=${post._id}`, {}, {
+            await axios.put(`${process.env.PROD_URL}/api/like?id=${post._id}`, {}, {
                 headers: { "content-type": "application/json", "token": token }
             });
             setLikes(isliked ? likes - 1 : likes + 1);
@@ -60,7 +60,7 @@ const Post = ({ post }) => {
     const handleSaved = async () => {
         const token = localStorage.getItem('token');
         try {
-            await axios.put(`http://localhost:3000/api/save?id=${post._id}`, {}, {
+            await axios.put(`${process.env.PROD_URL}/api/save?id=${post._id}`, {}, {
                 headers: { "content-type": "application/json", "token": token }
             });
             setIssaved(!issaved);
@@ -73,7 +73,7 @@ const Post = ({ post }) => {
     const handleComment = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:3000/api/comment?id=${post._id}`, commentData, {
+            await axios.put(`${process.env.PROD_URL}/api/comment?id=${post._id}`, commentData, {
                 headers: { "content-type": "application/json" }
             });
             setComments(comments + 1);
@@ -89,7 +89,7 @@ const Post = ({ post }) => {
         const token = localStorage.getItem('token');
 
         try {
-            const res = await axios.delete(`http://localhost:3000/api/deleterecipe?id=${id}`, {
+            const res = await axios.delete(`${process.env.PROD_URL}/api/deleterecipe?id=${id}`, {
                 headers: { "token": token }
             })
 
@@ -135,7 +135,7 @@ const Post = ({ post }) => {
 
         const fetchUser = async () => {
 
-            const res = await axios.get(`http://localhost:3000/api/getoneuser?id=${post.user}`);
+            const res = await axios.get(`${process.env.PROD_URL}/api/getoneuser?id=${post.user}`);
 
             if (res.status === 200) {
                 setUser(res.data);

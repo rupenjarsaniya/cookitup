@@ -40,7 +40,7 @@ const Token = () => {
     const handleForgotSubmit = async () => {
         const token = router.query.token.split('=')[1];
         try {
-            const res = await axios.post('http://localhost:3000/api/forgotpassword', passwords, {
+            const res = await axios.post(`${process.env.PROD_URL}/api/forgotpassword`, passwords, {
                 headers: { "content-type": "application/json", "passtoken": token }
             });
 

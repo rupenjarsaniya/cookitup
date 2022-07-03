@@ -62,7 +62,7 @@ const Id = ({ recipe }) => {
             formData.set("foodimg", updateRecipe.foodimg);
             formData.set("makingsteps", JSON.stringify(updateSteps));
 
-            const res = await axios.put('http://localhost:3000/api/updaterecipe?id=' + id, formData, {
+            const res = await axios.put(`${process.env.PROD_URL}/api/updaterecipe?id=` + id, formData, {
                 headers: { "content-type": "multipart/form-data", "token": token }
             });
 
