@@ -58,7 +58,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
 
   useEffect(() => {
     const fetchSome = async () => {
-      const res = await axios.get(`${process.env.PROD_URL}/api/count`);
+      const res = await axios.get(`/api/count`);
       setTotalRecipes(res.data.recipes);
       setTotalUsers(res.data.users);
     }

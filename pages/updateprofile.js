@@ -58,7 +58,7 @@ const Updateprofile = () => {
             formdata.set("email", updateData.email);
             formdata.set("profileimg", updateData.profileimg);
 
-            const res = await axios.put(`${process.env.PROD_URL}/api/updateprofile`, formdata, {
+            const res = await axios.put(`/api/updateprofile`, formdata, {
                 headers: { "content-type": "multipart/form-data", "token": token }
             });
 

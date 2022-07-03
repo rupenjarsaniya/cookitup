@@ -51,15 +51,11 @@ const Login = () => {
     }
 
     const handleLogin = async () => {
-        console.log(errors);
-
         try {
 
-            const res = await axios.post(`${process.env.PROD_URL}/api/login`, userdata, {
+            const res = await axios.post(`/api/login`, userdata, {
                 headers: { "content-type": "application/json" }
             });
-
-            console.log(res);
 
             if (res.status === 200) {
                 actions.getUser(res.data.user);
@@ -127,7 +123,7 @@ const Login = () => {
             />
             <Grid container spacing={0} justifyContent="center" alignItems="center">
                 <Grid item xs={12} lg={6}>
-                    <BaseCard title="Login Here!">
+                    <BaseCard title="Welcome Back">
                         <form className="form" onSubmit={handleSubmit(handleLogin)}>
                             <TextField
                                 style={{ width: "100%" }}

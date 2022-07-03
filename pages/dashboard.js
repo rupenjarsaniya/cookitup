@@ -26,7 +26,7 @@ const Dashboard = () => {
     const handleDeletePost = async (id) => {
         const token = localStorage.getItem('token');
         try {
-            const res = await axios.delete(`${process.env.PROD_URL}/api/deleterecipe?id=` + id, {
+            const res = await axios.delete(`/api/deleterecipe?id=` + id, {
                 headers: { "token": token }
             });
 
@@ -70,7 +70,7 @@ const Dashboard = () => {
         const token = localStorage.getItem('token');
         const fetchRecipes = async () => {
 
-            const recipes = await axios.get(`${process.env.PROD_URL}/api/getrecipe`, {
+            const recipes = await axios.get(`/api/getrecipe`, {
                 headers: { "token": token }
             });
             setRecipes(recipes.data);

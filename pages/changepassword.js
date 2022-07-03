@@ -47,7 +47,7 @@ const Changepassword = () => {
 
         const token = localStorage.getItem('token');
         try {
-            const res = await axios.put(`${process.env.PROD_URL}/api/changepassword`, passwords, {
+            const res = await axios.put(`/api/changepassword`, passwords, {
                 headers: { "content-type": "application/json", "token": token }
             });
 

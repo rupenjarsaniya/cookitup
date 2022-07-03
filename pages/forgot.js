@@ -37,7 +37,7 @@ const Forgot = () => {
 
     const handleSendOtp = async () => {
         try {
-            const res = await axios.post(`${process.env.PROD_URL}/api/sendotp`, email, {
+            const res = await axios.post(`/api/sendotp`, email, {
                 headers: { "content-type": "application/json" }
             });
 
@@ -82,7 +82,7 @@ const Forgot = () => {
 
         const data = { email, otp }
         try {
-            const res = await axios.post(`${process.env.PROD_URL}/api/checkotp`, data, {
+            const res = await axios.post(`/api/checkotp`, data, {
                 headers: { "content-type": "application/json" }
             });
 

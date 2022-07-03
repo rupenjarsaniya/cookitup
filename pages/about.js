@@ -37,7 +37,7 @@ const About = ({ feedbacks }) => {
     try {
       feedbackData.name = userdata.name;
       feedbackData.userId = userdata._id;
-      const res = await axios.post(`${process.env.PROD_URL}/api/feedback`, feedbackData, {
+      const res = await axios.post(`/api/feedback`, feedbackData, {
         headers: { "content-type": "application/json", "token": token }
       });
 

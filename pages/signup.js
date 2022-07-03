@@ -75,7 +75,7 @@ const Signup = () => {
 
         try {
 
-            const res = await axios.post(`${process.env.PROD_URL}/api/signup`, formdata, {
+            const res = await axios.post(`/api/signup`, formdata, {
                 headers: { "content-type": "multipart/form-data" }
             });
 

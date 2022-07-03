@@ -48,7 +48,7 @@ const FullLayout = ({ children }) => {
   useEffect(() => {
 
     const getUser = async () => {
-      const res = await axios.get(`${process.env.PROD_URL}/api/getuser`, {
+      const res = await axios.get(`/api/getuser`, {
         headers: {
           "token": token
         }
