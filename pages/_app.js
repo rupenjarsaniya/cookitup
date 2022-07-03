@@ -7,7 +7,6 @@ import FullLayout from "../src/layouts/FullLayout";
 import "../styles/globals.css";
 import { Provider } from 'react-redux';
 import store from '../States/store';
-import MainState from "../context/mainState";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -19,11 +18,9 @@ function MyApp({ Component, pageProps }) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Provider store={store}>
-          <MainState>
-            <FullLayout>
-              <Component {...pageProps} />
-            </FullLayout>
-          </MainState>
+          <FullLayout>
+            <Component {...pageProps} />
+          </FullLayout>
         </Provider>
       </ThemeProvider>
     </>
