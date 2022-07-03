@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import validator from "validator";
 import bcrypt from 'bcrypt';
-const ErrorHandler = require('../helpers/Errorhandler');
 import httpStatusCodes from "../helpers/httpStatusCodes";
 
 const UserSchema = mongoose.Schema({
@@ -66,7 +65,7 @@ UserSchema.methods.generateToken = async function (req, res) {
         return jwt.sign({ _id: this._id }, process.env.JWT_SECRET_KEY);
     }
     catch (error) {
-        throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Something went wrong while generating token");
+        return res.status(httpStatusCodes.METHOD_NOT_ALLOWED).json("Something went wrong while generating token");
     }
 }
 
