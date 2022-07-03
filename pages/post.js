@@ -38,8 +38,8 @@ const Post = ({ post }) => {
     const [show, setShow] = useState(false);
     const [user, setUser] = useState({});
     const [likes, setLikes] = useState(post.likes.length);
-    const [isliked, setIsliked] = useState(null);
-    const [issaved, setIssaved] = useState(null);
+    const [isliked, setIsliked] = useState();
+    const [issaved, setIssaved] = useState();
     const [comments, setComments] = useState(post.comments.length);
     const [commentData, setCommnetData] = useState({});
 
