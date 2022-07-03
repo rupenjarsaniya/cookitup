@@ -1,5 +1,4 @@
 import multer from "multer";
-import ErrorHandler from "../helpers/Errorhandler";
 import httpStatusCodes from "../helpers/httpStatusCodes";
 
 const DIR = './public/foodimg/';
@@ -21,7 +20,7 @@ const uploadfoodimg = multer({
             cb(null, true);
         } else {
             cb(null, false);
-            throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, 'Only .png, .jpg and .jpeg format allowed!');
+            return res.status(httpStatusCodes.METHOD_NOT_ALLOWED).json("Only .png, .jpg and .jpeg format allowed!");
         }
     }
 });

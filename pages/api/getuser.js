@@ -1,7 +1,6 @@
 import nextConnect from "next-connect";
 import connectDb from "../../database/database";
 import User from '../../models/User';
-import ErrorHandler from '../../helpers/Errorhandler';
 import httpStatusCodes from '../../helpers/httpStatusCodes';
 import AuthenticateUser from '../../middlewares/authenticateUser';
 
@@ -21,7 +20,7 @@ handler.get(async (req, res) => {
     }
 
     catch (error) {
-        throw new ErrorHandler(httpStatusCodes.BAD_REQUEST, error);
+        return res.status(httpStatusCodes.BAD_REQUEST).json("Something went wrong");
     }
 
 });

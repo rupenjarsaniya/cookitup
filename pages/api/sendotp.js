@@ -4,7 +4,6 @@ import otpgenerator from 'otp-generator';
 import connectDb from "../../database/database";
 import User from '../../models/User';
 import Otp from '../../models/Otp';
-import ErrorHandler from '../../helpers/Errorhandler';
 import httpStatusCodes from '../../helpers/httpStatusCodes';
 import nodemailer from 'nodemailer';
 
@@ -16,7 +15,7 @@ handler.post(async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body });
 
-    if (!user) throw new ErrorHandler(httpStatusCodes.NOT_FOUND, "User not found with this email id");
+    if (!user) return res.status(httpStatusCodes.NOT_FOUND).json("User not found with this email id");
 
     const OTP = otpgenerator.generate(6, { digits: true, lowerCaseAlphabets: false, specialChars: false, upperCaseAlphabets: false });
 
@@ -53,7 +52,7 @@ handler.post(async (req, res) => {
           </div>`,
     });
 
-    if (!info) throw new ErrorHandler(httpStatusCodes.INTERNAL_SERVER, "Something went wrong, Please try after sometime");
+    if (!info) return res.status(httpStatusCodes.INTERNAL_SERVER).json("Something went wrong, Please try after sometime");
 
     const createData = new Otp({
       email: req.body,
@@ -62,14 +61,13 @@ handler.post(async (req, res) => {
 
     const saveData = await createData.save();
 
-    if (!saveData) throw new ErrorHandler(httpStatusCodes.INTERNAL_SERVER, "Something went wrong");
+    if (!saveData) return res.status(httpStatusCodes.INTERNAL_SERVER).json("Something went wrong");
 
     return res.status(httpStatusCodes.OK).send("OTP send successfully");
   }
 
   catch (error) {
-    console.log(error);
-    throw new ErrorHandler(httpStatusCodes.BAD_REQUEST, error);
+    return res.status(httpStatusCodes.BAD_REQUEST).json("Something went wrong");
   }
 
 });

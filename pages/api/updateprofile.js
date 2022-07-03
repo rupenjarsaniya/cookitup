@@ -1,7 +1,6 @@
 import nextConnect from 'next-connect';
 import connectDb from '../../database/database';
 import User from '../../models/User';
-import ErrorHandler from '../../helpers/Errorhandler';
 import httpStatusCodes from '../../helpers/httpStatusCodes';
 import upload from '../../middlewares/profileimage';
 import AuthenticateUser from '../../middlewares/authenticateUser';
@@ -22,7 +21,7 @@ handler.put(async (req, res) => {
 
         const checkusername = await User.findOne({ username });
 
-        if (checkusername) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Username already taken");
+        if (checkusername) return res.status(httpStatusCodes.METHOD_NOT_ALLOWED).json("Username already taken");
 
         if (username) { userobj.username = username };
         if (name) { userobj.name = name };
@@ -35,14 +34,14 @@ handler.put(async (req, res) => {
 
         const updateUser = await User.findByIdAndUpdate(req.userId, { $set: userobj }, { new: true, runValidators: true });
 
-        if (!updateUser) throw new ErrorHandler(httpStatusCodes.INTERNAL_SERVER, "Someting went wrong");
+        if (!updateUser) return res.status(httpStatusCodes.INTERNAL_SERVER).json("Someting went wrong");
 
         return res.status(200).json({ user: updateUser, message: "Profile Updated" });
 
     }
 
     catch (error) {
-        throw new ErrorHandler(httpStatusCodes.BAD_REQUEST, error);
+        return res.status(httpStatusCodes.BAD_REQUEST).json("Something went wrong");
     }
 
 });

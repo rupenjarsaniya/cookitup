@@ -1,7 +1,6 @@
 import nextConnect from "next-connect";
 import connectDb from "../../database/database";
 import User from '../../models/User';
-import ErrorHandler from '../../helpers/Errorhandler';
 import httpStatusCodes from '../../helpers/httpStatusCodes';
 
 const handler = nextConnect();
@@ -15,7 +14,7 @@ handler.get(async (req, res) => {
 
         const userdata = await User.findById(req.query.id).select({ password: 0 });
 
-        if (!userdata) throw new ErrorHandler(httpStatusCodes.NOT_FOUND, "User not found");
+        if (!userdata) return res.status(httpStatusCodes.NOT_FOUND).json("User not found");
 
         return res.status(httpStatusCodes.OK).json(userdata);
 
@@ -23,7 +22,7 @@ handler.get(async (req, res) => {
     }
 
     catch (error) {
-        throw new ErrorHandler(httpStatusCodes.BAD_REQUEST, error);
+        return res.status(httpStatusCodes.BAD_REQUEST).json("Something went wrong");
     }
 
 });

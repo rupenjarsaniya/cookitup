@@ -1,7 +1,6 @@
 import nextConnect from "next-connect";
 import Recipe from "../../models/Recipe";
 import connectDb from "../../database/database";
-import ErrorHandler from "../../helpers/Errorhandler";
 import httpStatusCodes from "../../helpers/httpStatusCodes";
 import AuthenticateUser from "../../middlewares/authenticateUser";
 import uploadfoodimg from "../../middlewares/foodimage";
@@ -21,7 +20,7 @@ handler.post(async (req, res) => {
 
         const recipe = await Recipe.find({ user: req.userId, title: req.body.title });
 
-        if (recipe.length !== 0) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Recipe already posted");
+        if (recipe.length !== 0) return res.status(httpStatusCodes.METHOD_NOT_ALLOWED).json("Recipe already posted");
 
         const createData = new Recipe({
             user: req.userId,
@@ -33,14 +32,14 @@ handler.post(async (req, res) => {
 
         const saveData = await createData.save();
 
-        if (!saveData) throw new ErrorHandler(httpStatusCodes.INTERNAL_SERVER, "Something went wrong");
+        if (!saveData) return res.status(httpStatusCodes.INTERNAL_SERVER).json("Something went wrong");
 
         return res.status(httpStatusCodes.OK).json({ recipe: saveData, message: "Post Completed" });
 
     }
 
     catch (error) {
-        throw new ErrorHandler(httpStatusCodes.BAD_REQUEST, error);
+        return res.status(httpStatusCodes.BAD_REQUEST).json("Something went wrong");
     }
 
 });

@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import ErrorHandler from '../helpers/Errorhandler';
 import httpStatusCodes from '../helpers/httpStatusCodes';
 
 const AuthenticateUser = async (req, res, next) => {
@@ -17,7 +16,7 @@ const AuthenticateUser = async (req, res, next) => {
     }
 
     catch (error) {
-        throw new ErrorHandler(httpStatusCodes.BAD_REQUEST, error);
+        return res.status(httpStatusCodes.BAD_REQUEST).json("Something went wrong");
     }
 
 };

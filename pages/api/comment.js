@@ -2,7 +2,6 @@ import nextConnect from "next-connect";
 import Recipe from "../../models/Recipe";
 import User from "../../models/User";
 import connectDb from "../../database/database";
-import ErrorHandler from "../../helpers/Errorhandler";
 import httpStatusCodes from "../../helpers/httpStatusCodes";
 
 const handler = nextConnect();
@@ -15,11 +14,11 @@ handler.put(async (req, res) => {
 
         const user = await User.findById(req.body.userId);
 
-        if (!user) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Not allowed to comment on post");
+        if (!user) return res.status(httpStatusCodes.METHOD_NOT_ALLOWED).json("Not allowed to comment on post");
 
         const recipe = await Recipe.findById(req.query.id);
 
-        if (!recipe) throw new ErrorHandler(httpStatusCodes.NOT_FOUND, "Recipe not found");
+        if (!recipe) return res.status(httpStatusCodes.NOT_FOUND).json("Recipe not found");
 
         const commentObj = {
             user: req.body.userId,
@@ -29,15 +28,14 @@ handler.put(async (req, res) => {
 
         const saveData = await Recipe.updateOne({ $push: { comments: commentObj } });
 
-        if (!saveData) throw new ErrorHandler(httpStatusCodes.INTERNAL_SERVER, "Something went wrong");
+        if (!saveData) return res.status(httpStatusCodes.INTERNAL_SERVER).json("Something went wrong");
 
         return res.status(200).send("Commented");
 
     }
 
     catch (error) {
-        console.log(error);
-        throw new ErrorHandler(httpStatusCodes.BAD_REQUEST, error);
+        return res.status(httpStatusCodes.BAD_REQUEST).json("Something went wrong");
     }
 
 });

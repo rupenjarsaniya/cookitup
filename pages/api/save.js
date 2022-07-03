@@ -2,7 +2,6 @@ import nextConnect from 'next-connect';
 import connectDb from '../../database/database';
 import User from '../../models/User';
 import Recipe from '../../models/Recipe';
-import ErrorHandler from '../../helpers/Errorhandler';
 import httpStatusCodes from '../../helpers/httpStatusCodes';
 import AuthenticateUser from '../../middlewares/authenticateUser';
 
@@ -25,7 +24,7 @@ handler.put(async (req, res) => {
 
             const unsaveUserId = await recipe.updateOne({ $pull: { saverecipeusers: req.userId } });
 
-            if (!unsaveRecipe || !unsaveUserId) throw new ErrorHandler(httpStatusCodes.INTERNAL_SERVER, "Something went wrong");
+            if (!unsaveRecipe || !unsaveUserId) return res.status(httpStatusCodes.INTERNAL_SERVER).json("Something went wrong");
 
             return res.status(httpStatusCodes.OK).send("Post has been removed from save");
 
@@ -37,7 +36,7 @@ handler.put(async (req, res) => {
 
             const saveUserId = await recipe.updateOne({ $push: { saverecipeusers: req.userId } });
 
-            if (!saveRecipe || !saveUserId) throw new ErrorHandler(httpStatusCodes.INTERNAL_SERVER, "Something went wrong");
+            if (!saveRecipe || !saveUserId) return res.status(httpStatusCodes.INTERNAL_SERVER).json("Something went wrong");
 
             return res.status(httpStatusCodes.OK).send("Post has been added to save");
 
@@ -45,7 +44,7 @@ handler.put(async (req, res) => {
     }
 
     catch (error) {
-        throw new ErrorHandler(httpStatusCodes.BAD_REQUEST, error);
+        return res.status(httpStatusCodes.BAD_REQUEST).json("Something went wrong");
     }
 
 });

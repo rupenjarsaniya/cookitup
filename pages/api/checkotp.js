@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import connectDb from "../../database/database";
 import Otp from '../../models/Otp';
 import Forgottoken from '../../models/Forgottoken';
-import ErrorHandler from '../../helpers/Errorhandler';
 import httpStatusCodes from '../../helpers/httpStatusCodes';
 import nodemailer from 'nodemailer';
 
@@ -18,7 +17,7 @@ handler.post(async (req, res) => {
 
         const otpHolder = await Otp.find({ email: req.body.email });
 
-        if (otpHolder.length === 0) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Otp was expire");
+        if (otpHolder.length === 0) return res.status(httpStatusCodes.METHOD_NOT_ALLOWED).json("Otp was expire");
 
         const rightOtp = otpHolder[otpHolder.length - 1];
 
@@ -70,18 +69,18 @@ handler.post(async (req, res) => {
 
             const deleteOtp = await Otp.deleteMany({ email: rightOtp.email });
 
-            if (!saveData || !deleteOtp) throw new ErrorHandler(httpStatusCodes.INTERNAL_SERVER, "Something went wrong");
+            if (!saveData || !deleteOtp) return res.status(httpStatusCodes.INTERNAL_SERVER).json("Something went wrong");
 
             return res.status(httpStatusCodes.OK).send("Password reset link sended to your email id");
 
         }
 
-        else throw new ErrorHandler(httpStatusCodes.BAD_REQUEST, "Wrong OTP");
+        else return res.status(httpStatusCodes.BAD_REQUEST).json("Wrong OTP");
 
     }
 
     catch (error) {
-        throw new ErrorHandler(httpStatusCodes.BAD_REQUEST, error);
+        return res.status(httpStatusCodes.BAD_REQUEST).json("Something went wrong");
     }
 });
 

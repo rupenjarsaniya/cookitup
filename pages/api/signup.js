@@ -2,7 +2,6 @@ import nextConnect from 'next-connect';
 import connectDb from '../../database/database';
 import User from '../../models/User';
 import SendToken from '../../helpers/sendToken';
-import ErrorHandler from '../../helpers/Errorhandler';
 import httpStatusCodes from '../../helpers/httpStatusCodes';
 import upload from '../../middlewares/profileimage';
 
@@ -21,11 +20,11 @@ handler.post(async (req, res) => {
 
         const username = await User.findOne({ username: req.body.username });
 
-        if (username) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Username already taken");
+        if (username) return res.status(httpStatusCodes.METHOD_NOT_ALLOWED).json("Username already taken");
 
         const user = await User.findOne({ email: req.body.email });
 
-        if (user) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "This email id already in use");
+        if (user) return res.status(httpStatusCodes.METHOD_NOT_ALLOWED).json("This email id already in use");
 
         const createUser = new User({
             username: req.body.username,
@@ -37,13 +36,13 @@ handler.post(async (req, res) => {
 
         const saveUser = await createUser.save();
 
-        if (!saveUser) throw new ErrorHandler(httpStatusCodes.INTERNAL_SERVER, "Something went wrong");
+        if (!saveUser) return res.status(httpStatusCodes.INTERNAL_SERVER).json("Something went wrong");
 
         SendToken(saveUser, res, "Account Created");
     }
 
     catch (error) {
-        throw new ErrorHandler(httpStatusCodes.BAD_REQUEST, error);
+        return res.status(httpStatusCodes.BAD_REQUEST).json("Something went wrong");
     }
 
 });

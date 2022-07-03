@@ -1,7 +1,6 @@
 import nextConnect from "next-connect";
 import Feedback from "../../models/Feedback";
 import connectDb from "../../database/database";
-import ErrorHandler from "../../helpers/Errorhandler";
 import httpStatusCodes from "../../helpers/httpStatusCodes";
 import AuthenticateUser from "../../middlewares/authenticateUser";
 
@@ -28,7 +27,7 @@ handler.post(async (req, res) => {
 
             const saveNewFeedback = await createFeedbackData.save();
 
-            if (!saveNewFeedback) throw new ErrorHandler(httpStatusCodes.INTERNAL_SERVER, "Something went wrong");
+            if (!saveNewFeedback) return res.status(httpStatusCodes.INTERNAL_SERVER).json("Something went wrong");
 
             return res.status(httpStatusCodes.OK).json({ feedback: saveNewFeedback });
 
@@ -41,14 +40,14 @@ handler.post(async (req, res) => {
 
         const saveFeedback = await fb.save();
 
-        if (!saveFeedback) throw new ErrorHandler(httpStatusCodes.INTERNAL_SERVER, "Something went wrong");
+        if (!saveFeedback) return res.status(httpStatusCodes.INTERNAL_SERVER).json("Something went wrong");
 
         return res.status(httpStatusCodes.OK).json({ feedback: saveFeedback });
 
     }
 
     catch (error) {
-        throw new ErrorHandler(httpStatusCodes.BAD_REQUEST, error);
+        return res.status(httpStatusCodes.BAD_REQUEST).json("Something went wrong");
     }
 
 });
