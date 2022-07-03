@@ -1,7 +1,6 @@
-import { Button, FormControl, Grid, Stack, TextField, Typography } from '@mui/material'
+import { Button, FormControl, Grid, TextField, Typography } from '@mui/material'
 import axios from 'axios'
 import { useRouter } from 'next/router';
-import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import BaseCard from '../src/components/baseCard/BaseCard'
 import { ToastContainer, toast } from 'react-toastify';

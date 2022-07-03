@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {
     Grid,
-    Stack,
     TextField,
-    Checkbox,
-    FormGroup,
-    FormControlLabel,
-    RadioGroup,
-    Radio,
-    FormLabel,
-    FormControl,
     Button,
     Typography,
     Avatar,
@@ -113,7 +105,7 @@ const Updateprofile = () => {
     useEffect(() => {
         if (!localStorage.getItem('token')) router.push("/login");
 
-    }, [router.query]);
+    }, []);
 
     return (
         <>

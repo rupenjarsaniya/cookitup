@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import FeatherIcon from "feather-icons-react";
 import {
-    Grid,
     Button,
     Box,
     Typography,
@@ -21,11 +20,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { format } from 'timeago.js'
 
-const post = ({ post }) => {
+const Post = ({ post }) => {
 
     const userdata = useSelector((state) => state.user);
 
-    const [anchorEl4, setAnchorEl4] = React.useState(null);
+    const [anchorEl4, setAnchorEl4] = useState(null);
 
     const handleClick4 = (event) => {
         setAnchorEl4(event.currentTarget);
@@ -39,8 +38,8 @@ const post = ({ post }) => {
     const [show, setShow] = useState(false);
     const [user, setUser] = useState({});
     const [likes, setLikes] = useState(post.likes.length);
-    const [isliked, setIsliked] = useState();
-    const [issaved, setIssaved] = useState();
+    const [isliked, setIsliked] = useState(null);
+    const [issaved, setIssaved] = useState(null);
     const [comments, setComments] = useState(post.comments.length);
     const [commentData, setCommnetData] = useState({});
 
@@ -347,4 +346,4 @@ const post = ({ post }) => {
     )
 }
 
-export default post
+export default Post

@@ -4,7 +4,6 @@ import {
     Typography,
 } from "@mui/material";
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 import Post from './post';
 import { useRouter } from 'next/router';
 
