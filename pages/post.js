@@ -37,10 +37,10 @@ const Post = ({ post }) => {
 
     const [show, setShow] = useState(false);
     const [user, setUser] = useState({});
-    const [likes, setLikes] = useState(post.likes.length);
-    const [isliked, setIsliked] = useState();
-    const [issaved, setIssaved] = useState();
-    const [comments, setComments] = useState(post.comments.length);
+    const [likes, setLikes] = useState(0);
+    const [isliked, setIsliked] = useState(null);
+    const [issaved, setIssaved] = useState(null);
+    const [comments, setComments] = useState(0);
     const [commentData, setCommnetData] = useState({});
 
     const handleLikes = async () => {
@@ -147,6 +147,10 @@ const Post = ({ post }) => {
                 setIssaved(post.saverecipeusers.includes(userdata._id))
 
                 setCommnetData({ name: userdata.name, comment: "", userId: userdata._id })
+
+                setLikes(post.likes.length);
+
+                setComments(post.comments.length);
             }
 
         }
@@ -156,7 +160,7 @@ const Post = ({ post }) => {
     }, [userdata]);
 
     return (
-        <Typography variant="div" style={{ display: "block", backgroundColor: "rgb(255, 255, 255)", borderRadius: 10 }} py={3} px={3} mb={3} key={post._id}>
+        <Typography variant="div" style={{ display: "block", backgroundColor: "rgb(255, 255, 255)", borderRadius: 10 }} py={3} px={3} mb={3} key={post && post._id}>
             <ToastContainer
                 position="top-left"
                 autoClose={3000}
@@ -183,12 +187,12 @@ const Post = ({ post }) => {
                             />
                         </Link>
                         <Typography variant="h5" ml={2}>
-                            {post.title}
+                            {post && post.title}
                         </Typography>
                     </Typography >
                     <Typography variant="div" style={{ display: "flex", alignItems: "center" }}>
                         <Typography variant="div" style={{ fontSize: 14, color: "silver" }} mr={1}>
-                            {format(post.createdAt)}
+                            {post && format(post.createdAt)}
                         </Typography>
 
                         {
@@ -224,11 +228,11 @@ const Post = ({ post }) => {
                                                 onClick={handleClose4}
                                             >
                                                 <ListItemButton>
-                                                    <Link href={'/update/' + post._id}>
+                                                    <Link href={'/update/' + post && post._id}>
                                                         <ListItemText primary="Edit Recipe" />
                                                     </Link>
                                                 </ListItemButton>
-                                                <ListItemButton onClick={() => handleDelete(post._id)}>
+                                                <ListItemButton onClick={() => handleDelete(post && post._id)}>
                                                     <ListItemText primary="Delete Recipe" />
                                                 </ListItemButton>
 
@@ -246,7 +250,7 @@ const Post = ({ post }) => {
             <Typography Typography variant="div" >
                 <Typography variant="div" style={{ display: "block", borderTop: "1px solid #cccccc" }} my={2}></Typography>
                 {
-                    post.foodimg &&
+                    post && post.foodimg &&
                     <Image src={post.foodimg} alt="recipeimg" width={400} height={300} style={{ borderRadius: 10 }} />
                 }
                 <Typography variant="h4" color="primary" >
@@ -255,7 +259,7 @@ const Post = ({ post }) => {
                 <Typography variant="ul" style={{ display: "flex", flexDirection: "column", justifyContent: "center", fontSize: 15, color: "gray" }} >
 
                     {
-                        post.ingredients.split(",").map((item, index) => <Typography variant="li" style={{ margin: "4px 0" }} key={index + 1}><FeatherIcon icon="chevron-right" width="13" height="13" />
+                        post && post.ingredients.split(",").map((item, index) => <Typography variant="li" style={{ margin: "4px 0" }} key={index + 1}><FeatherIcon icon="chevron-right" width="13" height="13" />
                             {item}
                         </Typography>
                         )
@@ -264,11 +268,11 @@ const Post = ({ post }) => {
                 </Typography>
 
                 <Typography variant="h4" style={{ marginTop: 20 }} color="primary" >
-                    How to make {post.title}? Let&apos;s Cook
+                    How to make {post && post.title}? Let&apos;s Cook
                 </Typography>
                 <Typography variant="ol" style={{ display: "flex", flexDirection: "column", justifyContent: "center", fontSize: 15, color: "gray" }}>
                     {
-                        Object.keys(post.makingsteps).map((item, index) => {
+                        post && Object.keys(post.makingsteps).map((item, index) => {
                             return <Typography variant="li" style={{ margin: "4px 0" }} key={index + 1}>
                                 {post.makingsteps[item]}
                             </Typography>
@@ -293,7 +297,7 @@ const Post = ({ post }) => {
                     </IconButton>
                 </Typography>
                 <Typography variant="div" fontSize={12} style={{ color: "gray" }}>
-                    {likes} Likes • {comments} Comments
+                    {likes && likes} Likes • {comments && comments} Comments
                 </Typography>
             </Typography>
 
@@ -323,7 +327,7 @@ const Post = ({ post }) => {
                     <Typography variant="div" mt={2} style={{ display: "block" }}>
 
                         {
-                            post.comments.map((user) => <Typography variant="div" style={{ display: "block" }} pb={1} mb={3} key={user._id}>
+                            post && post.comments.map((user) => <Typography variant="div" style={{ display: "block" }} pb={1} mb={3} key={user._id}>
                                 <Typography variant="div" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
                                     <Avatar alt="Remy Sharp" src="userlogo.png" />
                                     <Typography variant="h5" ml={1}>
