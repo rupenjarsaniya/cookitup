@@ -68,7 +68,7 @@ const Login = () => {
                 localStorage.setItem("token", res.data.token);
                 toast.success(res.data.message, {
                     position: "top-left",
-                    autoClose: 3000,
+                    autoClose: 1000,
                     hideProgressBar: true,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -79,13 +79,13 @@ const Login = () => {
                 setUserdata({ email: "", password: "" });
                 setTimeout(() => {
                     router.push("/");
-                }, 1000);
+                }, 500);
             }
 
             else {
                 toast.error(res.response.data, {
                     position: "top-left",
-                    autoClose: 3000,
+                    autoClose: 1000,
                     hideProgressBar: true,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -98,7 +98,7 @@ const Login = () => {
         catch (error) {
             toast.error(error.response.data, {
                 position: "top-left",
-                autoClose: 3000,
+                autoClose: 1000,
                 hideProgressBar: true,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -118,7 +118,7 @@ const Login = () => {
         <>
             <ToastContainer
                 position="top-left"
-                autoClose={3000}
+                autoClose={1000}
                 hideProgressBar
                 newestOnTop={false}
                 closeOnClick

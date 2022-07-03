@@ -4,11 +4,12 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <Box sx={{ p: 3, textAlign: "center" }}>
-      <Typography>
+      <Typography style={{ fontSize: 14, color: "gray" }}>
         © 2022 All rights reserved by{" "}
         <Link href={'/'}>
-          <a>Cookitup.com</a>
+          <a style={{ color: '#FFA500' }}>Cookitup</a>
         </Link>{" "}
+        by RJ
       </Typography>
     </Box>
   );

@@ -246,7 +246,10 @@ const post = ({ post }) => {
             {/* Content */}
             <Typography Typography variant="div" >
                 <Typography variant="div" style={{ display: "block", borderTop: "1px solid #cccccc" }} my={2}></Typography>
-                <Image src={`${post.foodimg ? post.foodimg : "/logo.png"}`} alt="recipeimg" width={400} height={300} style={{ borderRadius: 10 }} />
+                {
+                    post.foodimg &&
+                    <Image src={post.foodimg} alt="recipeimg" width={400} height={300} style={{ borderRadius: 10 }} />
+                }
                 <Typography variant="h4" color="primary" >
                     Ingredients:
                 </Typography>

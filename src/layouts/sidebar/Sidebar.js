@@ -68,7 +68,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
   const SidebarContent = (
     <Box p={2} height="100%">
       <LogoIcon />
-      <Box mt={2}>
+      <Box>
         <List>
           {
             Menuitems.map((item, index) => (

@@ -62,12 +62,11 @@ const Addrecipe = () => {
                 headers: { "content-type": "multipart/form-data", "token": token }
             });
 
-            console.log(res);
 
             if (res.status === 200) {
                 toast.success(res.data.message, {
                     position: "top-left",
-                    autoClose: 3000,
+                    autoClose: 1000,
                     hideProgressBar: true,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -77,10 +76,9 @@ const Addrecipe = () => {
                 router.push('/dashboard');
             }
             else {
-                console.log(res);
                 toast.error(res.response.data, {
                     position: "top-left",
-                    autoClose: 3000,
+                    autoClose: 1000,
                     hideProgressBar: true,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -90,10 +88,9 @@ const Addrecipe = () => {
             }
         }
         catch (error) {
-            console.log(error);
             toast.error(error.response.data, {
                 position: "top-left",
-                autoClose: 3000,
+                autoClose: 1000,
                 hideProgressBar: true,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -111,7 +108,7 @@ const Addrecipe = () => {
         <>
             <ToastContainer
                 position="top-left"
-                autoClose={3000}
+                autoClose={1000}
                 hideProgressBar
                 newestOnTop={false}
                 closeOnClick
@@ -166,8 +163,8 @@ const Addrecipe = () => {
                                     label="Step 1"
                                     name="step1"
                                     variant="outlined"
-                                    onChange={handleMakingSteps}
                                     {...register('step1')}
+                                    onChange={handleMakingSteps}
                                 />
                                 {
                                     errors.step1 && <span style={{ color: "red", fontSize: 13 }}>{errors.step1.message}</span>
@@ -178,8 +175,8 @@ const Addrecipe = () => {
                                     label="Step 2"
                                     name="step2"
                                     variant="outlined"
-                                    onChange={handleMakingSteps}
                                     {...register('step2')}
+                                    onChange={handleMakingSteps}
                                     style={{ marginTop: 20 }}
                                 />
                                 {
@@ -191,8 +188,8 @@ const Addrecipe = () => {
                                     label="Step 3"
                                     name="step3"
                                     variant="outlined"
-                                    onChange={handleMakingSteps}
                                     {...register('step3')}
+                                    onChange={handleMakingSteps}
                                     style={{ marginTop: 20 }}
                                 />
                                 {
