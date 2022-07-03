@@ -6,6 +6,12 @@ import ErrorHandler from "../helpers/Errorhandler";
 import httpStatusCodes from "../helpers/httpStatusCodes";
 
 const UserSchema = mongoose.Schema({
+    username: {
+        type: String,
+        minlength: [3, "Name must be atleast 3 characters"],
+        required: true,
+        unique: true
+    },
     name: {
         type: String,
         minlength: [3, "Name must be atleast 3 characters"],

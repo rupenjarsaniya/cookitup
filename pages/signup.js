@@ -73,6 +73,7 @@ const Signup = () => {
     const handleSignup = async () => {
 
         const formdata = new FormData();
+        formdata.set("username", userdata.username);
         formdata.set("name", userdata.name);
         formdata.set("email", userdata.email);
         formdata.set("password", userdata.password);

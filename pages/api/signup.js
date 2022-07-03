@@ -19,11 +19,16 @@ handler.post(async (req, res) => {
             profileimg = '/userprofileimg/' + req.file.filename;
         }
 
+        const username = await User.findOne({ username: req.body.username });
+
+        if (username) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Username already taken");
+
         const user = await User.findOne({ email: req.body.email });
 
         if (user) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "This email id already in use");
 
         const createUser = new User({
+            username: req.body.username,
             name: req.body.name,
             email: req.body.email,
             password: req.body.password,

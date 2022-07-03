@@ -16,10 +16,15 @@ handler.put(async (req, res) => {
     // Change http:// to protocol
     try {
 
-        const { name, email, gender, location, expertin, expirence } = req.body;
+        const { name, username, email, gender, location, expertin, expirence } = req.body;
 
         let userobj = {};
 
+        const checkusername = await User.findOne({ username });
+
+        if (checkusername) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Username already taken");
+
+        if (username) { userobj.username = username };
         if (name) { userobj.name = name };
         if (email) { userobj.email = email };
         if (gender) { userobj.gender = gender };

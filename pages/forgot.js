@@ -21,10 +21,6 @@ const Forgot = () => {
     const router = useRouter();
 
     const validationSchema = Yup.object().shape({
-        otp: Yup.string()
-            .required('OTP cannot be blank')
-            .min(6, 'Password must be 6 digits')
-            .max(6, 'Password must be 6 digits'),
         email: Yup.string()
             .required('Email is required')
             .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
@@ -81,7 +77,9 @@ const Forgot = () => {
         }
     }
 
-    const handleOtpSubmit = async () => {
+    const handleOtpSubmit = async (e) => {
+        e.preventDefault();
+
         const data = { email, otp }
         try {
             const res = await axios.post('http://localhost:3000/api/checkotp', data, {
@@ -153,12 +151,10 @@ const Forgot = () => {
                             </Button>
 
                         </form>
-                        <form className='form' style={{ marginBottom: 20 }} onSubmit={handleSubmit(handleOtpSubmit)}>
+                        <form className='form' style={{ marginBottom: 20 }} onSubmit={handleOtpSubmit}>
 
-                            <TextField id="otp-basic" type="number" name="otp" label="Otp" variant="outlined" {...register('otp')} onChange={(e) => { setOtp(e.target.value) }} value={otp} />
-                            {
-                                errors.otp && <span style={{ color: "red", fontSize: 13 }}>{errors.otp.message}</span>
-                            }
+                            <TextField id="otp-basic" type="number" name="otp" label="Otp" variant="outlined" maxlength={6} minlength={6} required onChange={(e) => { setOtp(e.target.value) }} value={otp} />
+
                             <Button type="submit" variant="contained" style={{ marginTop: 20 }}>
                                 Continue
                             </Button>
