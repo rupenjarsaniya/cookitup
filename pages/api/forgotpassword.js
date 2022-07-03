@@ -5,18 +5,16 @@ import User from '../../models/User';
 import Forgottoken from '../../models/Forgottoken';
 import ErrorHandler from '../../helpers/Errorhandler';
 import httpStatusCodes from '../../helpers/httpStatusCodes';
-import AuthenticateUser from '../../middlewares/authenticateUser';
 
 const handler = nextConnect();
 
 handler.use(connectDb);
-handler.use(AuthenticateUser);
 
 handler.post(async (req, res) => {
     try {
 
         const getToken = await Forgottoken.findOne({ token: req.headers.passtoken });
-        console.log(getToken);
+
         if (!getToken) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Password reset link was expire");
 
         if (req.body.password !== req.body.confirmpassword) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Passwords not matched");

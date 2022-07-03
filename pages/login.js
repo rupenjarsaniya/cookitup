@@ -18,6 +18,9 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../States/index';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 const Login = () => {
 
@@ -26,6 +29,22 @@ const Login = () => {
 
     const actions = bindActionCreators(actionCreators, dispatch);
 
+
+    const validationSchema = Yup.object().shape({
+        email: Yup.string()
+            .required('Email is required')
+            .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+            .email('Email is invalid'),
+        password: Yup.string()
+            .min(4, 'Password must be at least 4 characters')
+            .required('Password is required')
+    });
+    const formOptions = { resolver: yupResolver(validationSchema) };
+
+    const { register, handleSubmit, reset, formState } = useForm(formOptions);
+    const { errors } = formState;
+
+
     const [userdata, setUserdata] = useState({ email: "", password: "" });
     const [show, setShow] = useState(false);
 
@@ -33,8 +52,8 @@ const Login = () => {
         setUserdata({ ...userdata, [e.target.name]: e.target.value });
     }
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
+    const handleLogin = async () => {
+        console.log(errors);
 
         try {
 
@@ -111,18 +130,21 @@ const Login = () => {
             <Grid container spacing={0} justifyContent="center" alignItems="center">
                 <Grid item xs={12} lg={6}>
                     <BaseCard title="Login Here!">
-                        <form className="form" onSubmit={handleLogin}>
+                        <form className="form" onSubmit={handleSubmit(handleLogin)}>
                             <TextField
                                 style={{ width: "100%" }}
                                 type="email"
                                 id="email"
                                 name='email'
                                 label="Email"
+                                {...register('email')}
                                 variant="outlined"
-                                required
                                 onChange={handleData}
                                 value={userdata.email}
                             />
+                            {
+                                errors.email && <span style={{ color: "red", fontSize: 13 }}>Email not valid</span>
+                            }
 
                             <TextField
                                 id="Password"
@@ -130,11 +152,14 @@ const Login = () => {
                                 type={`${show ? "text" : "password"}`}
                                 name="password"
                                 variant="outlined"
-                                required
+                                {...register('password')}
                                 style={{ width: "100%", marginTop: 20 }}
                                 onChange={handleData}
                                 value={userdata.password}
                             />
+                            {
+                                errors.password && <span style={{ color: "red", fontSize: 13 }}>{errors.password.message}</span>
+                            }
 
                             <FormControlLabel
                                 control={<Checkbox />}

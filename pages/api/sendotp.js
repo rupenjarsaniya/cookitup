@@ -5,12 +5,10 @@ import User from '../../models/User';
 import Otp from '../../models/Otp';
 import ErrorHandler from '../../helpers/Errorhandler';
 import httpStatusCodes from '../../helpers/httpStatusCodes';
-import AuthenticateUser from '../../middlewares/authenticateUser';
 
 const handler = nextConnect();
 
 handler.use(connectDb);
-handler.use(AuthenticateUser);
 
 handler.post(async (req, res) => {
     console.log(req.body);
@@ -18,8 +16,6 @@ handler.post(async (req, res) => {
         const user = await User.findOne({ email: req.body });
 
         if (!user) throw new ErrorHandler(httpStatusCodes.NOT_FOUND, "User not found with this email id");
-
-        if (user._id.toString() !== req.userId) throw new ErrorHandler(httpStatusCodes.NOT_FOUND, "User not found");
 
         const OTP = otpgenerator.generate(6, { digits: true, lowerCaseAlphabets: false, specialChars: false, upperCaseAlphabets: false });
 

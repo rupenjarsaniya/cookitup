@@ -23,6 +23,9 @@ import { actionCreators } from '../States';
 import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 const Updateprofile = () => {
 
@@ -32,7 +35,21 @@ const Updateprofile = () => {
     const userdata = useSelector(state => state.user);
     const actions = bindActionCreators(actionCreators, dispatch);
 
-    const [updateData, setUpdateData] = useState({ name: "", email: "", profileimg: "" });
+    const validationSchema = Yup.object().shape({
+        username: Yup.string()
+            .min(3, 'Username must be at least 3 characters'),
+        name: Yup.string()
+            .min(3, 'Name must be at least 3 characters'),
+        email: Yup.string()
+            .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+            .email('Email is invalid'),
+    });
+    const formOptions = { resolver: yupResolver(validationSchema) };
+
+    const { register, handleSubmit, reset, formState } = useForm(formOptions);
+    const { errors } = formState;
+
+    const [updateData, setUpdateData] = useState({ username: "", name: "", email: "", profileimg: "" });
 
     const handleUpdateData = (e) => {
         if (e.target.name === 'profileimg') {
@@ -43,11 +60,11 @@ const Updateprofile = () => {
         }
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleRegister = async () => {
         try {
             const token = localStorage.getItem('token');
             const formdata = new FormData();
+            formdata.set("username", updateData.username);
             formdata.set("name", updateData.name);
             formdata.set("email", updateData.email);
             formdata.set("profileimg", updateData.profileimg);
@@ -124,48 +141,71 @@ const Updateprofile = () => {
                                 sx={{ width: 100, height: 100, margin: "auto", objectFit: "fill" }}
                             />
                         </Typography>
-                        <form className="form" onSubmit={handleSubmit}>
+                        <form className="form" onSubmit={handleSubmit(handleRegister)}>
 
-                            <Stack spacing={3}>
-                                <TextField
-                                    id="name"
-                                    name="name"
-                                    label="Name"
-                                    variant="outlined"
-                                    type="text"
-                                    defaultValue={userdata && userdata.name}
-                                    onChange={handleUpdateData}
-                                />
+                            <TextField
+                                id="username"
+                                name="username"
+                                label="Username"
+                                variant="outlined"
+                                type="text"
+                                {...register('username')}
+                                onChange={handleUpdateData}
+                            // value={userdata.username}
+                            />
+                            {
+                                errors.username && <span style={{ color: "red", fontSize: 13 }}>{errors.username.message}</span>
+                            }
 
+                            <TextField
+                                id="name"
+                                name="name"
+                                label="Name"
+                                variant="outlined"
+                                type="text"
+                                {...register('name')}
+                                defaultValue={userdata && userdata.name}
+                                onChange={handleUpdateData}
+                                style={{ marginTop: 20 }}
+                            />
+                            {
+                                errors.name && <span style={{ color: "red", fontSize: 13 }}>{errors.name.message}</span>
+                            }
 
-                                <TextField
-                                    id="email"
-                                    name="email"
-                                    label="Email"
-                                    variant="outlined"
-                                    defaultValue={userdata && userdata.email}
-                                    onChange={handleUpdateData}
-                                />
+                            <TextField
+                                id="email"
+                                name="email"
+                                label="Email"
+                                variant="outlined"
+                                type="email"
+                                {...register('email')}
+                                defaultValue={userdata && userdata.email}
+                                onChange={handleUpdateData}
+                                style={{ marginTop: 20 }}
+                            />
+                            {
+                                errors.email && <span style={{ color: "red", fontSize: 13 }}>Email must be valid</span>
+                            }
 
+                            <Typography variant="div" style={{ color: "gray", marginTop: 20 }}>
+                                Select Profile Photo
+                            </Typography>
 
-                                <Typography variant="div" style={{ color: "gray" }}>
-                                    Select Profile Photo
-                                </Typography>
+                            <input type="file" id="actual-btn" name="profileimg" onChange={handleUpdateData}
+                                style={{ marginTop: 20 }} />
 
-                                <input type="file" id="actual-btn" name="profileimg" onChange={handleUpdateData} />
-
-                                <Link href={"/changepassword"}>
-                                    <Typography variant="div" mt={3} style={{ cursor: "pointer" }} color="primary">
-                                        Change Password
-                                    </Typography>
-                                </Link>
-
-                            </Stack>
-                            <br />
-                            <Button type="submit" variant="contained" mt={2}>
+                            <Button type="submit" variant="contained"
+                                style={{ marginTop: 20 }}>
                                 Update Profile
                             </Button>
                         </form>
+                        <Typography variant="div" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} color="primary">
+                            <Link href={"/changepassword"}>
+                                <Typography variant="div" mt={3} style={{ cursor: "pointer" }} color="primary">
+                                    Change Password
+                                </Typography>
+                            </Link>
+                        </Typography>
                     </BaseCard>
                 </Grid>
             </Grid>

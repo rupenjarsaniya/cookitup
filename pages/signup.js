@@ -24,6 +24,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../States/index';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 const Signup = () => {
 
@@ -32,7 +35,28 @@ const Signup = () => {
 
     const actions = bindActionCreators(actionCreators, dispatch);
 
-    const [userdata, setUserdata] = useState({ name: "", email: "", password: "", profileimg: "" });
+    const validationSchema = Yup.object().shape({
+        username: Yup.string()
+            .required('Username is required')
+            .min(3, 'Username must be at least 3 characters'),
+        name: Yup.string()
+            .required('Name is required')
+            .min(3, 'Name must be at least 3 characters'),
+        email: Yup.string()
+            .required('Email is required')
+            .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+            .email('Email is invalid'),
+        password: Yup.string()
+            .min(4, 'Password must be at least 4 characters')
+            .required('Password is required')
+    });
+    const formOptions = { resolver: yupResolver(validationSchema) };
+
+    const { register, handleSubmit, reset, formState } = useForm(formOptions);
+    const { errors } = formState;
+
+
+    const [userdata, setUserdata] = useState({ username: "", name: "", email: "", password: "", profileimg: "" });
     const [profileImgPre, setProfileImgPre] = useState("");
     const [show, setShow] = useState(false);
 
@@ -46,8 +70,7 @@ const Signup = () => {
         }
     }
 
-    const handleSignup = async (e) => {
-        e.preventDefault();
+    const handleSignup = async () => {
 
         const formdata = new FormData();
         formdata.set("name", userdata.name);
@@ -131,31 +154,50 @@ const Signup = () => {
                                 sx={{ width: 100, height: 100, margin: "auto" }}
                             />
                         </Typography>
-                        <form className='form' onSubmit={handleSignup}>
+                        <form className='form' onSubmit={handleSubmit(handleSignup)}>
+                            <TextField
+                                id="username"
+                                name="username"
+                                label="Username"
+                                variant="outlined"
+                                type="text"
+                                {...register('username')}
+                                onChange={handleData}
+                                style={{ width: "100%" }}
+                                value={userdata.username}
+                            />
+                            {
+                                errors.username && <span style={{ color: "red", fontSize: 13 }}>{errors.username.message}</span>
+                            }
+
                             <TextField
                                 id="name"
                                 name="name"
                                 label="Name"
                                 variant="outlined"
                                 type="text"
+                                {...register('name')}
                                 onChange={handleData}
-                                style={{ width: "100%" }}
-                                required
+                                style={{ width: "100%", marginTop: 20 }}
                                 value={userdata.name}
                             />
-
+                            {
+                                errors.name && <span style={{ color: "red", fontSize: 13 }}>{errors.name.message}</span>
+                            }
 
                             <TextField
                                 id="email"
                                 name="email"
                                 label="Email"
                                 variant="outlined"
+                                {...register('email')}
                                 onChange={handleData}
                                 style={{ width: "100%", marginTop: 20 }}
-                                required
                                 value={userdata.email}
                             />
-
+                            {
+                                errors.email && <span style={{ color: "red", fontSize: 13 }}>Email not valid</span>
+                            }
 
                             <TextField
                                 id="pass-basic"
@@ -163,11 +205,14 @@ const Signup = () => {
                                 type={`${show ? "text" : "password"}`}
                                 name="password"
                                 variant="outlined"
+                                {...register('password')}
                                 onChange={handleData}
                                 style={{ width: "100%", marginTop: 20 }}
-                                required
                                 value={userdata.password}
                             />
+                            {
+                                errors.password && <span style={{ color: "red", fontSize: 13 }}>{errors.password.message}</span>
+                            }
 
                             <Typography variant="div" style={{ color: "gray", marginTop: 20 }}>
                                 Select Profile Photo

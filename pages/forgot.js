@@ -12,24 +12,37 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 const Forgot = () => {
 
     const router = useRouter();
-    const [show, setShow] = useState();
-    const [passwordShow, setPasswordShow] = useState(false);
+
+    const validationSchema = Yup.object().shape({
+        otp: Yup.string()
+            .required('OTP cannot be blank')
+            .min(6, 'Password must be 6 digits')
+            .max(6, 'Password must be 6 digits'),
+        email: Yup.string()
+            .required('Email is required')
+            .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+            .email('Email is invalid')
+    });
+    const formOptions = { resolver: yupResolver(validationSchema) };
+
+    const { register, handleSubmit, reset, formState } = useForm(formOptions);
+    const { errors } = formState;
+
     const [email, setEmail] = useState("");
     const [otp, setOtp] = useState("");
-    const [passwords, setPasswords] = useState({ password: "", confirmpassword: "" });
 
-    const handlePasswords = (e) => setPasswords({ ...passwords, [e.target.name]: e.target.value });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const token = localStorage.getItem('token');
+    const handleSendOtp = async () => {
         try {
             const res = await axios.post('http://localhost:3000/api/sendotp', email, {
-                headers: { "content-type": "application/json", "token": token }
+                headers: { "content-type": "application/json" }
             });
 
             if (res.status === 200) {
@@ -68,13 +81,11 @@ const Forgot = () => {
         }
     }
 
-    const handleOtpSubmit = async (e) => {
-        e.preventDefault();
-        const token = localStorage.getItem('token');
+    const handleOtpSubmit = async () => {
         const data = { email, otp }
         try {
             const res = await axios.post('http://localhost:3000/api/checkotp', data, {
-                headers: { "content-type": "application/json", "token": token }
+                headers: { "content-type": "application/json" }
             });
 
             if (res.status === 200) {
@@ -115,55 +126,8 @@ const Forgot = () => {
         }
     }
 
-    const handleForgotSubmit = async (e) => {
-        e.preventDefault();
-        const token = localStorage.getItem('token');
-        try {
-            const res = await axios.post('http://localhost:3000/api/forgotpassword', passwords, {
-                headers: { "content-type": "application/json", "token": token, "passtoken": router.query.token }
-            });
-
-            if (res.status === 200) {
-                toast.success(res.data, {
-                    position: "top-left",
-                    autoClose: 3000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                router.push('/');
-            }
-            else {
-                toast.error(res.response.data, {
-                    position: "top-left",
-                    autoClose: 3000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            }
-        }
-        catch (error) {
-            toast.error(error.response.data, {
-                position: "top-left",
-                autoClose: 3000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        }
-    }
-
     useEffect(() => {
-        if (!localStorage.getItem('token')) router.push("/login");
-        if (router.query.token) setShow(true);
-        else setShow(false);
+        if (localStorage.getItem('token')) router.push("/");
     }, [router.query]);
 
     return (
@@ -182,64 +146,28 @@ const Forgot = () => {
             <Grid container spacing={0} direction="row" justifyContent="center" alignItems="center">
                 <Grid item xs={12} lg={6}>
                     <BaseCard title="Forgot Password">
-                        {!show
-                            ? <>
-                                <form className='form' style={{ marginBottom: 20 }} onSubmit={handleSubmit}>
-                                    <Stack spacing={3}>
-                                        <TextField id="email-basic" name="email" label="Email" variant="outlined" onChange={(e) => { setEmail(e.target.value) }} value={email} required />
+                        <form className='form' style={{ marginBottom: 20 }} onSubmit={handleSubmit(handleSendOtp)}>
 
-                                        <Button type="submit" variant="contained" mt={2}>
-                                            Send OTP
-                                        </Button>
+                            <TextField id="email-basic" type="email" name="email" label="Email" variant="outlined" {...register('email')} onChange={(e) => { setEmail(e.target.value) }} value={email} />
+                            {
+                                errors.email && <span style={{ color: "red", fontSize: 13 }}>Email not valid</span>
+                            }
+                            <Button type="submit" variant="contained" style={{ marginTop: 20 }}>
+                                Send OTP
+                            </Button>
 
-                                    </Stack>
-                                </form>
-                                <form className='form' style={{ marginBottom: 20 }} onSubmit={handleOtpSubmit}>
-                                    <Stack spacing={3}>
-                                        <TextField id="otp-basic" name="otp" label="Otp" variant="outlined" onChange={(e) => { setOtp(e.target.value) }} value={otp} required />
+                        </form>
+                        <form className='form' style={{ marginBottom: 20 }} onSubmit={handleSubmit(handleOtpSubmit)}>
 
-                                        <Button type="submit" variant="contained" mt={2}>
-                                            Continue
-                                        </Button>
+                            <TextField id="otp-basic" type="number" name="otp" label="Otp" variant="outlined" {...register('otp')} onChange={(e) => { setOtp(e.target.value) }} value={otp} />
+                            {
+                                errors.otp && <span style={{ color: "red", fontSize: 13 }}>{errors.otp.message}</span>
+                            }
+                            <Button type="submit" variant="contained" style={{ marginTop: 20 }}>
+                                Continue
+                            </Button>
 
-                                    </Stack>
-                                </form>
-                            </>
-                            : <form className='form' onSubmit={handleForgotSubmit}>
-                                <Stack spacing={3}>
-                                    <TextField
-                                        id="pass-basic"
-                                        label="New Password"
-                                        type="password"
-                                        name="password"
-                                        variant="outlined"
-                                        required
-                                        value={passwords.password}
-                                        onChange={handlePasswords}
-                                    />
-
-                                    <TextField
-                                        id="pass-basic2"
-                                        label="New Confirm Password"
-                                        type="password"
-                                        name="confirmpassword"
-                                        variant="outlined"
-                                        required
-                                        value={passwords.confirmpassword}
-                                        onChange={handlePasswords}
-                                    />
-
-                                    <FormControlLabel
-                                        control={<Checkbox />}
-                                        label="Show Password"
-                                        onChange={() => { setPasswordShow(!passwordShow) }}
-                                    />
-                                    <Button type="submit" variant="contained" mt={2}>
-                                        Continue
-                                    </Button>
-                                </Stack>
-                            </form>
-                        }
+                        </form>
                     </BaseCard>
                 </Grid>
             </Grid>

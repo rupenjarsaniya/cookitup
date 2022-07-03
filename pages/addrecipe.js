@@ -6,10 +6,33 @@ import React, { useEffect, useState } from 'react'
 import BaseCard from '../src/components/baseCard/BaseCard'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 
 const Addrecipe = () => {
     const router = useRouter();
+
+    const validationSchema = Yup.object().shape({
+        title: Yup.string()
+            .required('Title is required')
+            .min(3, 'Title must be at least 3 characters'),
+        ingredients: Yup.string()
+            .required('Ingredients is required')
+            .min(3, 'Ingredients must be at least 3 characters'),
+        step1: Yup.string()
+            .required('This Field cannot blank'),
+        step2: Yup.string()
+            .required('This Field cannot blank'),
+        step3: Yup.string()
+            .required('This Field cannot blank'),
+    });
+    const formOptions = { resolver: yupResolver(validationSchema) };
+
+    const { register, handleSubmit, reset, formState } = useForm(formOptions);
+    const { errors } = formState;
+
     const [recipeData, setRecipeData] = useState({ title: "", ingredients: "", foodimg: "" });
     const [steps, setSteps] = useState({});
 
@@ -25,8 +48,7 @@ const Addrecipe = () => {
     const handleMakingSteps = (e) => setSteps({ ...steps, [e.target.name]: e.target.value });
 
 
-    const handleNewRecipe = async (e) => {
-        e.preventDefault();
+    const handleNewRecipe = async () => {
 
         try {
             const token = localStorage.getItem("token");
@@ -104,103 +126,135 @@ const Addrecipe = () => {
                         <Typography variant="h2" color="primary" mb={5} style={{ textAlign: "center" }}>
                             Add Your Own Recipe On <Typography variant="div" color="primary" style={{ fontWeight: 900 }}>CookItUp</Typography> !
                         </Typography>
-                        <form className='form' onSubmit={handleNewRecipe}>
+                        <form className='form' onSubmit={handleSubmit(handleNewRecipe)}>
 
                             <FormControl>
-                                <Stack spacing={2}>
-                                    <TextField
-                                        id="name"
-                                        name="title"
-                                        label="Name of Recipe"
-                                        variant="outlined"
-                                        onChange={handleRecipeData}
-                                    />
+                                <TextField
+                                    id="name"
+                                    name="title"
+                                    label="Name of Recipe"
+                                    variant="outlined"
+                                    {...register('title')}
+                                    onChange={handleRecipeData}
+                                    style={{ marginTop: 20 }}
+                                />
+                                {
+                                    errors.title && <span style={{ color: "red", fontSize: 13 }}>{errors.title.message}</span>
+                                }
 
-                                    <TextField
-                                        id="outlined-multiline-static"
-                                        name="ingredients"
-                                        label="Ingredients (eg. 1 cup all purpose flour (Maida), Water to Knead dough, 2 tbsp oil)"
-                                        multiline
-                                        rows={4}
-                                        onChange={handleRecipeData}
-                                    />
+                                <TextField
+                                    id="outlined-multiline-static"
+                                    name="ingredients"
+                                    label="Ingredients (eg. 1 cup all purpose flour (Maida), Water to Knead dough, 2 tbsp oil)"
+                                    multiline
+                                    rows={4}
+                                    {...register('ingredients')}
+                                    onChange={handleRecipeData}
+                                    style={{ marginTop: 20 }}
+                                />
+                                {
+                                    errors.ingredients && <span style={{ color: "red", fontSize: 13 }}>{errors.ingredients.message}</span>
+                                }
 
-                                    <input type="file" id="actual-btn" name="foodimg" style={{ marginBottom: 20 }}
-                                        onChange={handleRecipeData} />
+                                <input type="file" id="actual-btn" name="foodimg" style={{ marginBottom: 20, marginTop: 20 }}
+                                    onChange={handleRecipeData} />
 
-                                    <Typography variant="h2" color="primary" mb={5} style={{ textAlign: "center" }}>How to make?</Typography>
+                                <Typography variant="h2" color="primary" mb={3} style={{ textAlign: "center" }}>How to make?</Typography>
 
-                                    <TextField
-                                        id="name-basic1"
-                                        label="Step 1"
-                                        name="step1"
-                                        variant="outlined"
-                                        onChange={handleMakingSteps}
-                                    />
-                                    <TextField
-                                        id="name-basic2"
-                                        label="Step 2"
-                                        name="step2"
-                                        variant="outlined"
-                                        onChange={handleMakingSteps}
-                                    />
-                                    <TextField
-                                        id="name-basic3"
-                                        label="Step 3"
-                                        name="step3"
-                                        variant="outlined"
-                                        onChange={handleMakingSteps}
-                                    />
-                                    <TextField
-                                        id="name-basic4"
-                                        label="Step 4"
-                                        name="step4"
-                                        variant="outlined"
-                                        onChange={handleMakingSteps}
-                                    />
-                                    <TextField
-                                        id="name-basic5"
-                                        label="Step 5"
-                                        name="step5"
-                                        variant="outlined"
-                                        onChange={handleMakingSteps}
-                                    />
-                                    <TextField
-                                        id="name-basic6"
-                                        label="Step 6"
-                                        name="step6"
-                                        variant="outlined"
-                                        onChange={handleMakingSteps}
-                                    />
-                                    <TextField
-                                        id="name-basic7"
-                                        label="Step 7"
-                                        name="step7"
-                                        variant="outlined"
-                                        onChange={handleMakingSteps}
-                                    />
-                                    <TextField
-                                        id="name-basic8"
-                                        label="Step 8"
-                                        name="step8"
-                                        variant="outlined"
-                                        onChange={handleMakingSteps}
-                                    />
-                                    <TextField
-                                        id="name-basic9"
-                                        label="Step 9"
-                                        name="step9"
-                                        variant="outlined"
-                                        onChange={handleMakingSteps}
-                                    />
-                                    <TextField
-                                        id="name-basic10"
-                                        label="Step 10"
-                                        name="step10"
-                                        variant="outlined"
-                                        onChange={handleMakingSteps}
-                                    />
-                                </Stack>
+                                <TextField
+                                    id="name-basic1"
+                                    label="Step 1"
+                                    name="step1"
+                                    variant="outlined"
+                                    onChange={handleMakingSteps}
+                                    {...register('step1')}
+                                />
+                                {
+                                    errors.step1 && <span style={{ color: "red", fontSize: 13 }}>{errors.step1.message}</span>
+                                }
+
+                                <TextField
+                                    id="name-basic2"
+                                    label="Step 2"
+                                    name="step2"
+                                    variant="outlined"
+                                    onChange={handleMakingSteps}
+                                    {...register('step2')}
+                                    style={{ marginTop: 20 }}
+                                />
+                                {
+                                    errors.step2 && <span style={{ color: "red", fontSize: 13 }}>{errors.step2.message}</span>
+                                }
+
+                                <TextField
+                                    id="name-basic3"
+                                    label="Step 3"
+                                    name="step3"
+                                    variant="outlined"
+                                    onChange={handleMakingSteps}
+                                    {...register('step3')}
+                                    style={{ marginTop: 20 }}
+                                />
+                                {
+                                    errors.step3 && <span style={{ color: "red", fontSize: 13 }}>{errors.step3.message}</span>
+                                }
+
+                                <TextField
+                                    id="name-basic4"
+                                    label="Step 4"
+                                    name="step4"
+                                    variant="outlined"
+                                    onChange={handleMakingSteps}
+                                    style={{ marginTop: 20 }}
+                                />
+                                <TextField
+                                    id="name-basic5"
+                                    label="Step 5"
+                                    name="step5"
+                                    variant="outlined"
+                                    onChange={handleMakingSteps}
+                                    style={{ marginTop: 20 }}
+                                />
+                                <TextField
+                                    id="name-basic6"
+                                    label="Step 6"
+                                    name="step6"
+                                    variant="outlined"
+                                    onChange={handleMakingSteps}
+                                    style={{ marginTop: 20 }}
+                                />
+                                <TextField
+                                    id="name-basic7"
+                                    label="Step 7"
+                                    name="step7"
+                                    variant="outlined"
+                                    onChange={handleMakingSteps}
+                                    style={{ marginTop: 20 }}
+                                />
+                                <TextField
+                                    id="name-basic8"
+                                    label="Step 8"
+                                    name="step8"
+                                    variant="outlined"
+                                    onChange={handleMakingSteps}
+                                    style={{ marginTop: 20 }}
+                                />
+                                <TextField
+                                    id="name-basic9"
+                                    label="Step 9"
+                                    name="step9"
+                                    variant="outlined"
+                                    onChange={handleMakingSteps}
+                                    style={{ marginTop: 20 }}
+                                />
+                                <TextField
+                                    id="name-basic10"
+                                    label="Step 10"
+                                    name="step10"
+                                    variant="outlined"
+                                    onChange={handleMakingSteps}
+                                    style={{ marginTop: 20 }}
+                                />
                             </FormControl>
                             <Button type="submit" variant="contained" style={{ marginTop: 20 }}>
                                 Submit

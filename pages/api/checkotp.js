@@ -5,17 +5,15 @@ import Otp from '../../models/Otp';
 import Forgottoken from '../../models/Forgottoken';
 import ErrorHandler from '../../helpers/Errorhandler';
 import httpStatusCodes from '../../helpers/httpStatusCodes';
-import AuthenticateUser from '../../middlewares/authenticateUser';
 
 
 const handler = nextConnect();
 
 handler.use(connectDb);
-handler.use(AuthenticateUser);
 
 handler.post(async (req, res) => {
     try {
-        console.log(req.body);
+
         const otpHolder = await Otp.find({ email: req.body.email });
 
         if (otpHolder.length === 0) throw new ErrorHandler(httpStatusCodes.METHOD_NOT_ALLOWED, "Otp was expire");

@@ -9,6 +9,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import mongoose from 'mongoose';
 import Recipe from '../../models/Recipe';
 import { useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 const Id = ({ recipe }) => {
 
@@ -16,6 +19,19 @@ const Id = ({ recipe }) => {
     const { id } = router.query;
 
     const userdata = useSelector(state => state.user);
+
+    const validationSchema = Yup.object().shape({
+        title: Yup.string()
+            .required('Title is required')
+            .min(3, 'Title must be at least 3 characters'),
+        ingredients: Yup.string()
+            .required('Ingredients is required')
+            .min(3, 'Ingredients must be at least 3 characters')
+    });
+    const formOptions = { resolver: yupResolver(validationSchema) };
+
+    const { register, handleSubmit, reset, formState } = useForm(formOptions);
+    const { errors } = formState;
 
     const [updateRecipe, setUpdateRecipe] = useState({
         title: recipe.title,
@@ -36,8 +52,7 @@ const Id = ({ recipe }) => {
 
     const handleUpdateSteps = (e) => setUpdateSteps({ ...updateSteps, [e.target.name]: e.target.value });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleUpdateSubmit = async () => {
 
         try {
             const token = localStorage.getItem("token");
@@ -109,51 +124,62 @@ const Id = ({ recipe }) => {
                                 <Typography variant="h2" color="primary" mb={5} style={{ textAlign: "center" }}>
                                     Update Your Recipe On <Typography variant="div" color="primary" style={{ fontWeight: 900 }}>CookItUp</Typography> !
                                 </Typography>
-                                <form className='form' onSubmit={handleSubmit}>
+                                <form className='form' onSubmit={handleSubmit(handleUpdateSubmit)}>
 
                                     <FormControl>
-                                        <Stack spacing={2}>
-                                            <TextField
-                                                id="name"
-                                                name="title"
-                                                label="Name of Recipe"
-                                                variant="outlined"
-                                                value={updateRecipe.title}
-                                                onChange={handleUpdateRecipe}
-                                            />
+                                        <TextField
+                                            id="name"
+                                            name="title"
+                                            label="Name of Recipe"
+                                            variant="outlined"
+                                            {...register('title')}
+                                            value={updateRecipe.title}
+                                            onChange={handleUpdateRecipe}
+                                        />
+                                        {
+                                            errors.title && <span style={{ color: "red", fontSize: 13 }}>{errors.title.message}</span>
+                                        }
 
-                                            <TextField
-                                                id="outlined-multiline-static"
-                                                name="ingredients"
-                                                label="Ingredients (eg. 1 cup all purpose flour (Maida), Water to Knead dough, 2 tbsp oil)"
-                                                multiline
-                                                rows={4}
-                                                value={updateRecipe.ingredients}
-                                                onChange={handleUpdateRecipe}
-                                            />
+                                        <TextField
+                                            id="outlined-multiline-static"
+                                            name="ingredients"
+                                            label="Ingredients (eg. 1 cup all purpose flour (Maida), Water to Knead dough, 2 tbsp oil)"
+                                            multiline
+                                            rows={4}
+                                            {...register('ingredients')}
+                                            value={updateRecipe.ingredients}
+                                            onChange={handleUpdateRecipe}
+                                            style={{ marginTop: 20 }}
+                                        />
+                                        {
+                                            errors.ingredients && <span style={{ color: "red", fontSize: 13 }}>{errors.ingredients.message}</span>
+                                        }
 
-                                            <input type="file" id="actual-btn" name="foodimg" style={{ marginBottom: 20 }} onChange={handleUpdateRecipe} />
+                                        <input type="file" id="actual-btn" name="foodimg" style={{ marginTop: 20 }} onChange={handleUpdateRecipe} />
 
-                                            {/* <Image src={updateRecipe.foodimg} alt="kachori" width={400} height={300} style={{ borderRadius: 10 }} /> */}
+                                        {/* <Image src={updateRecipe.foodimg} alt="kachori" width={400} height={300} style={{ borderRadius: 10 }} /> */}
 
-                                            <Typography variant="h2" color="primary" mb={5} style={{ textAlign: "center" }}>How to make?</Typography>
+                                        <Typography variant="h2" color="primary" style={{ textAlign: "center", marginTop: 20 }}>How to make?</Typography>
 
-                                            {
-                                                Object.keys(updateSteps).map((item, index) => {
-                                                    return <TextField
-                                                        key={index + 1}
-                                                        id="name-basic1"
-                                                        label={`Step ${index + 1}`}
-                                                        name={`step${index + 1}`}
-                                                        variant="outlined"
-                                                        value={updateSteps[item]}
-                                                        onChange={handleUpdateSteps}
-                                                    />
-                                                })
-                                            }
+                                        {
+                                            Object.keys(updateSteps).map((item, index) => {
+                                                return <><TextField
+                                                    key={index + 1}
+                                                    id="name-basic1"
+                                                    label={`Step ${index + 1}`}
+                                                    name={`step${index + 1}`}
+                                                    variant="outlined"
+                                                    value={updateSteps[item]}
+                                                    onChange={handleUpdateSteps}
+                                                    style={{ marginTop: 20 }}
+                                                />
+
+                                                </>
+                                            })
+                                        }
 
 
-                                        </Stack>
+
                                     </FormControl>
                                     <Button type="submit" variant="contained" style={{ marginTop: 20 }}>
                                         Submit
