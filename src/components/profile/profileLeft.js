@@ -33,7 +33,7 @@ const ProfileLeft = ({ user }) => {
         const token = localStorage.getItem("token");
         e.preventDefault();
         try {
-            const res = await axios.put("http://localhost:3000/api/updateprofile", prInfo, {
+            const res = await axios.put(`/api/updateprofile`, prInfo, {
                 headers: { "content-type": "multipart/form-data", "token": token }
             });
 
