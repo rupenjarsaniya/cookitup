@@ -1,7 +1,6 @@
 import nextConnect from "next-connect";
 import Recipe from "../../models/Recipe";
 import connectDb from "../../database/database";
-import ErrorHandler from "../../helpers/Errorhandler";
 import AuthenticateUser from "../../middlewares/authenticateUser";
 
 const handler = nextConnect();
