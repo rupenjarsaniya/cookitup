@@ -264,7 +264,7 @@ const Post = ({ post }) => {
                 </Typography>
 
                 <Typography variant="h4" style={{ marginTop: 20 }} color="primary" >
-                    How to make Aloo Paratha? Let's Cook
+                    How to make {post.title}? Let&apos;s Cook
                 </Typography>
                 <Typography variant="ol" style={{ display: "flex", flexDirection: "column", justifyContent: "center", fontSize: 15, color: "gray" }}>
                     {
