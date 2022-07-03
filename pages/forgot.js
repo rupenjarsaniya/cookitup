@@ -126,10 +126,6 @@ const Forgot = () => {
         }
     }
 
-    useEffect(() => {
-        if (localStorage.getItem('token')) router.push("/");
-    }, [router.query]);
-
     return (
         <>
             <ToastContainer

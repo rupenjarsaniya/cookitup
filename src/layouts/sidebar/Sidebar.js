@@ -25,6 +25,7 @@ import axios from 'axios';
 const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const actions = bindActionCreators(actionCreators, dispatch);
 
@@ -51,6 +52,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
   const logoutUser = () => {
     localStorage.removeItem("token");
     actions.getUser("");
+    router.push('/');
   }
 
 

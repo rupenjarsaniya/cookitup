@@ -16,12 +16,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../../../States/index';
+import { useRouter } from 'next/router';
 
 const ProfileDD = () => {
 
   const userdata = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const actions = bindActionCreators(actionCreators, dispatch);
 
@@ -38,6 +40,7 @@ const ProfileDD = () => {
   const logoutUser = () => {
     localStorage.removeItem("token");
     actions.getUser("");
+    router.push('/');
   }
 
   return (
@@ -133,11 +136,9 @@ const ProfileDD = () => {
           <Box p={2}>
             {
               userdata ?
-                <Link href={""} >
-                  <Button fullWidth variant="contained" color="primary" onClick={logoutUser}>
-                    Logout
-                  </Button>
-                </Link>
+                <Button fullWidth variant="contained" color="primary" onClick={logoutUser}>
+                  Logout
+                </Button>
                 : <Link href={"/login"} >
                   <Button fullWidth variant="contained" color="primary">
                     Login

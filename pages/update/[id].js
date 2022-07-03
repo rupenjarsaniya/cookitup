@@ -103,6 +103,10 @@ const Id = ({ recipe }) => {
         }
     }
 
+    useEffect(() => {
+        if (!localStorage.getItem('token')) router.push("/");
+    }, []);
+
     return (
         <>
             <ToastContainer

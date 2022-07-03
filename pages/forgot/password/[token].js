@@ -81,11 +81,6 @@ const Token = () => {
         }
     }
 
-
-    useEffect(() => {
-        if (localStorage.getItem('token')) router.push("/");
-    }, []);
-
     return (
         <>
             <ToastContainer

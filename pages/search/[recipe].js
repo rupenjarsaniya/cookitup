@@ -5,8 +5,6 @@ import Recipe from '../../models/Recipe';
 import Post from '../post';
 
 const Recipes = ({ recipes, error }) => {
-    console.log(recipes);
-
     if (error) return <h1 style={{ textAlign: 'center' }}>{error}</h1>
 
     return (

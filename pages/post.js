@@ -23,6 +23,8 @@ import { format } from 'timeago.js'
 
 const post = ({ post }) => {
 
+    const userdata = useSelector((state) => state.user);
+
     const [anchorEl4, setAnchorEl4] = React.useState(null);
 
     const handleClick4 = (event) => {
@@ -33,7 +35,6 @@ const post = ({ post }) => {
         setAnchorEl4(null);
     };
 
-    const userdata = useSelector((state) => state.user);
 
     const [show, setShow] = useState(false);
     const [user, setUser] = useState({});
@@ -44,8 +45,11 @@ const post = ({ post }) => {
     const [commentData, setCommnetData] = useState({});
 
     const handleLikes = async () => {
+        const token = localStorage.getItem('token');
         try {
-            await axios.put(`http://localhost:3000/api/like?id=${post._id}`, { userId: user._id });
+            await axios.put(`http://localhost:3000/api/like?id=${post._id}`, {}, {
+                headers: { "content-type": "application/json", "token": token }
+            });
             setLikes(isliked ? likes - 1 : likes + 1);
             setIsliked(!isliked);
         }
@@ -131,25 +135,26 @@ const post = ({ post }) => {
     useEffect(() => {
 
         const fetchUser = async () => {
+
             const res = await axios.get(`http://localhost:3000/api/getoneuser?id=${post.user}`);
 
             if (res.status === 200) {
                 setUser(res.data);
             }
 
-            setIsliked(post.likes.includes(userdata._id))
+            if (userdata) {
+                setIsliked(post.likes.includes(userdata._id))
 
-            setIssaved(post.saverecipeusers.includes(userdata._id))
+                setIssaved(post.saverecipeusers.includes(userdata._id))
 
-            setCommnetData({ name: userdata.name, comment: "", userId: userdata._id })
+                setCommnetData({ name: userdata.name, comment: "", userId: userdata._id })
+            }
+
         }
 
+        fetchUser();
 
-        if (userdata) {
-            fetchUser();
-        }
-
-    }, [userdata, handleDelete]);
+    }, [userdata]);
 
     return (
         <Typography variant="div" style={{ display: "block", backgroundColor: "rgb(255, 255, 255)", borderRadius: 10 }} py={3} px={3} mb={3} key={post._id}>
@@ -336,8 +341,6 @@ const post = ({ post }) => {
                     </Typography></>
             }
         </Typography >
-
-
     )
 }
 

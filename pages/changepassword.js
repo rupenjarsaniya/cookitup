@@ -97,7 +97,6 @@ const Changepassword = () => {
 
     useEffect(() => {
         if (!localStorage.getItem('token')) router.push("/login");
-
     }, [router.query]);
 
     return (
