@@ -2,6 +2,7 @@ import nextConnect from "next-connect";
 import Recipe from "../../models/Recipe";
 import connectDb from "../../database/database";
 import AuthenticateUser from "../../middlewares/authenticateUser";
+import httpStatusCodes from "../../helpers/httpStatusCodes";
 
 const handler = nextConnect();
 
