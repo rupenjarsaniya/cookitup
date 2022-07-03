@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import validator from "validator";
 import bcrypt from 'bcrypt';
-import ErrorHandler from "../helpers/Errorhandler";
+const ErrorHandler = require('../helpers/Errorhandler');
 import httpStatusCodes from "../helpers/httpStatusCodes";
 
 const UserSchema = mongoose.Schema({
