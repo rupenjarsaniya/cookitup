@@ -30,7 +30,7 @@ handler.put(async (req, res) => {
         if (location) { userobj.location = location };
         if (expertin) { userobj.expertin = expertin };
         if (expirence) { userobj.expirence = expirence };
-        if (req.file) { userobj.profileimg = '/' + req.file.filename };
+        if (req.file) { userobj.profileimg = '/userprofileimg/' + req.file.filename };
 
         const updateUser = await User.findByIdAndUpdate(req.userId, { $set: userobj }, { new: true, runValidators: true });
 

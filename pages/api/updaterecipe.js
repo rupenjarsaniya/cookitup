@@ -24,7 +24,7 @@ handler.put(async (req, res) => {
         if (title) recipe.title = title;
         if (makingsteps) recipe.makingsteps = JSON.parse(makingsteps);
         if (ingredients) recipe.ingredients = ingredients;
-        if (req.file) recipe.foodimg = '/' + req.file.filename;;
+        if (req.file) recipe.foodimg = '/foodimg/' + req.file.filename;;
 
         const updateRecipe = await recipe.save();
 
