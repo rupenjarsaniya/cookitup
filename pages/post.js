@@ -46,7 +46,7 @@ const Post = ({ post }) => {
     const handleLikes = async () => {
         const token = localStorage.getItem('token');
         try {
-            await axios.put(`/api/like?id=${post._id}`, {}, {
+            await axios.put(`/api/like?id=${post && post._id}`, {}, {
                 headers: { "content-type": "application/json", "token": token }
             });
             setLikes(isliked ? likes - 1 : likes + 1);
@@ -60,7 +60,7 @@ const Post = ({ post }) => {
     const handleSaved = async () => {
         const token = localStorage.getItem('token');
         try {
-            await axios.put(`/api/save?id=${post._id}`, {}, {
+            await axios.put(`/api/save?id=${post && post._id}`, {}, {
                 headers: { "content-type": "application/json", "token": token }
             });
             setIssaved(!issaved);
@@ -73,7 +73,7 @@ const Post = ({ post }) => {
     const handleComment = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`/api/comment?id=${post._id}`, commentData, {
+            await axios.put(`/api/comment?id=${post && post._id}`, commentData, {
                 headers: { "content-type": "application/json" }
             });
             setComments(comments + 1);
@@ -135,7 +135,7 @@ const Post = ({ post }) => {
 
         const fetchUser = async () => {
 
-            const res = await axios.get(`/api/getoneuser?id=${post.user}`);
+            const res = await axios.get(`/api/getoneuser?id=${post && post.user}`);
 
             if (res.status === 200) {
                 setUser(res.data);

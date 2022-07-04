@@ -88,7 +88,6 @@ const Updateprofile = () => {
             }
         }
         catch (error) {
-            console.log(error);
             toast.error(error.response.data, {
                 position: "top-left",
                 autoClose: 3000,

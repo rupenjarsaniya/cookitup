@@ -15,7 +15,7 @@ handler.post(async (req, res) => {
     let profileimg = "";
     try {
         if (req.file) {
-            profileimg = '/userprofileimg/' + req.file.filename;
+            profileimg = '/' + req.file.filename;
         }
 
         const username = await User.findOne({ username: req.body.username });

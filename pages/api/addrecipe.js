@@ -16,7 +16,7 @@ handler.post(async (req, res) => {
 
         let foodImage = "";
 
-        if (req.file) foodImage = '/foodimg/' + req.file.filename;
+        if (req.file) foodImage = '/' + req.file.filename;
 
         const recipe = await Recipe.find({ user: req.userId, title: req.body.title });
 

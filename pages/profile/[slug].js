@@ -24,19 +24,19 @@ const Slug = ({ user, error, recipes }) => {
                         style={{ borderRadius: "100%", margin: "auto" }}
                     />
                     <Typography variant="h5" mt={3} style={{ display: "block", fontWeight: 700, fontSize: 25 }}>
-                        {user.name}
+                        {user && user.name}
                     </Typography>
                     <Typography variant="h5" mt={1} style={{ display: "block", fontWeight: 300, color: "gray" }}>
-                        Expert in Make {user.expertin}
+                        Expert in Make {user && user.expertin}
                     </Typography>
                 </Typography>
 
                 <Grid container spacing={0} mt={5}>
                     <Grid item xs={12} lg={3}>
-                        <ProfileLeft user={user} />
+                        <ProfileLeft user={user && user} />
                     </Grid>
                     <Grid item xs={12} lg={9}>
-                        <ProfileRight userId={user._id} recipes={recipes} />
+                        <ProfileRight userId={user && user._id} recipes={recipes} />
                     </Grid>
                 </Grid>
             </Grid>
