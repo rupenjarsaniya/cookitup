@@ -1,7 +1,7 @@
 import multer from "multer";
 import httpStatusCodes from "../helpers/httpStatusCodes";
 
-const DIR = '/public/userprofileimg/';
+const DIR = '/userprofileimg/';
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
