@@ -1,7 +1,7 @@
 import multer from "multer";
 import httpStatusCodes from "../helpers/httpStatusCodes";
 
-const DIR = "https:/" + "/cookitup.vercel.app/userprofileimg/";
+const DIR = './public/userprofileimg/';
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
