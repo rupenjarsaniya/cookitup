@@ -1,7 +1,7 @@
 import multer from "multer";
 import httpStatusCodes from "../helpers/httpStatusCodes";
 
-const DIR = process.env.WEBRJ + '/userprofileimg/';
+const DIR = "https://cookitup.vercel.app/userprofileimg/";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -26,3 +26,6 @@ const upload = multer({
 });
 
 module.exports = upload;
+git add .
+git commit -m "cookitup"
+git push
