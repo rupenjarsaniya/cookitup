@@ -26,6 +26,3 @@ const upload = multer({
 });
 
 module.exports = upload;
-git add .
-git commit -m "cookitup"
-git push
