@@ -228,7 +228,7 @@ const Post = ({ post }) => {
                                                 onClick={handleClose4}
                                             >
                                                 <ListItemButton>
-                                                    <Link href={'/update/' + post && post._id}>
+                                                    <Link href={`/update/${post && post._id}`}>
                                                         <ListItemText primary="Edit Recipe" />
                                                     </Link>
                                                 </ListItemButton>

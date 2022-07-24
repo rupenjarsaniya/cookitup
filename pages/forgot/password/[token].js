@@ -40,7 +40,7 @@ const Token = () => {
     const handleForgotSubmit = async () => {
         const token = router.query.token.split('=')[1];
         try {
-            const res = await axios.post(`${process.env.PROD_URL}/api/forgotpassword`, passwords, {
+            const res = await axios.post(`/api/forgotpassword`, passwords, {
                 headers: { "content-type": "application/json", "passtoken": token }
             });
 
@@ -54,7 +54,7 @@ const Token = () => {
                     draggable: true,
                     progress: undefined,
                 });
-                router.push('/');
+                router.push('/login');
             }
             else {
                 toast.error(res.response.data, {
@@ -69,6 +69,7 @@ const Token = () => {
             }
         }
         catch (error) {
+            console.log(error);
             toast.error(error.response.data, {
                 position: "top-left",
                 autoClose: 3000,
